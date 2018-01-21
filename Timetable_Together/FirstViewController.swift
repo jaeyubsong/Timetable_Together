@@ -25,11 +25,11 @@ class FirstViewController: UIViewController {
                      UIColor(red: 0.153, green: 0.569, blue: 0.835, alpha: 1)]
     
     let timeWidth = 30
-    let timeHeight = 50
+    let timeHeight = 51
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     let dayWidth = (Int(UIScreen.main.bounds.width)-30)/5
-    let dayHeight = 40
+    let dayHeight = 45
     
     
     
@@ -37,23 +37,23 @@ class FirstViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let Brown = UIColor.brown
-        let Aquamarine = UIColor(red: 127/255, green: 255/255, blue: 212/255, alpha: 1)
-        let PaleTurquoise = UIColor(red: 187/255, green: 255/255, blue: 255/255, alpha: 1)
-        let RosyBrown = UIColor(red: 255/255, green: 193/255, blue: 193/255, alpha: 1)
-        let bluish = UIColor(red: 69/255, green: 117/255, blue: 221/255, alpha: 1)
-        let orange = UIColor(red: 223/255, green: 111/255, blue: 56/255, alpha: 1)
+//        let Brown = UIColor.brown
+//        let Aquamarine = UIColor(red: 127/255, green: 255/255, blue: 212/255, alpha: 1)
+//        let PaleTurquoise = UIColor(red: 187/255, green: 255/255, blue: 255/255, alpha: 1)
+//        let RosyBrown = UIColor(red: 255/255, green: 193/255, blue: 193/255, alpha: 1)
+//        let bluish = UIColor(red: 69/255, green: 117/255, blue: 221/255, alpha: 1)
+//        let orange = UIColor(red: 223/255, green: 111/255, blue: 56/255, alpha: 1)
         
         
-        let startTime = 9
+        let startTime = 8
         let endTime = 18
         CreateTimeTable(startTime: startTime, endTime: endTime)
         // drawSquare(100, 600, 200, 700)
-        addClass(14, 15.5, 0, "데이타구조",startTime, Aquamarine)
-        addClass(12, 13, 2, "운영체제", startTime, bluish)
-        addClass(12, 13, 3, "다른과목", startTime, PaleTurquoise)
-        addClass(13, 14, 2, "과목2", startTime, RosyBrown)
-        addClass(16, 18, 4, "체육과목", startTime, RosyBrown)
+        addClass(14, 15.5, 0, "데이타구조",startTime, dayColors)
+        addClass(12, 13, 2, "운영체제", startTime, dayColors)
+        addClass(12, 13, 3, "다른과목", startTime, dayColors)
+        addClass(13, 14, 2, "과목2", startTime, dayColors)
+        addClass(16, 18, 4, "체육과목", startTime, dayColors)
         // addTextLabel(50, 50, 100, 100, "Text Text")
         
     }
@@ -71,7 +71,7 @@ class FirstViewController: UIViewController {
         scrollPage.addSubview(leftLine)
     }
     
-    func addTextLabel(_ x: Int, _ y: Int, _ width: Int, _ height: Int, _ text: String,  _ fontSize: Int) {
+    func addTextLabel(_ x: Int, _ y: Int, _ width: Int, _ height: Int, _ text: String,  _ fontSize: Int, _ color: UIColor) {
         
         let label = UILabel(frame: CGRect(x: x, y: y, width: width, height: height))
         // let myGreenColor = (UIColor(red: -0.108958, green: 0.714926, blue: 0.758113, alpha: 1.0))
@@ -83,17 +83,18 @@ class FirstViewController: UIViewController {
         label.textAlignment = .center
         label.font = UIFont(name:"Times New Roman", size: CGFloat(fontSize))
         // label.layer.cornerRadius = 5
+        label.textColor = color
         scrollPage.addSubview(label)
     }
     
     func CreateTimeTable(startTime: Int, endTime: Int) {
         
         // Add  요일
-        addTextLabel(timeWidth, 5, dayWidth, dayHeight, "월요일", 15)
-        addTextLabel(timeWidth + dayWidth, 5, dayWidth, dayHeight, "화요일", 15)
-        addTextLabel(timeWidth + dayWidth * 2, 5, dayWidth, dayHeight, "수요일", 15)
-        addTextLabel(timeWidth + dayWidth * 3, 5, dayWidth, dayHeight, "목요일", 15)
-        addTextLabel(timeWidth + dayWidth * 4, 5, dayWidth, dayHeight, "금요일", 15)
+        addTextLabel(timeWidth, 5, dayWidth, dayHeight, "월요일", 15, dayColors[0])
+        addTextLabel(timeWidth + dayWidth, 5, dayWidth, dayHeight, "화요일", 15, dayColors[1])
+        addTextLabel(timeWidth + dayWidth * 2, 5, dayWidth, dayHeight, "수요일", 15, dayColors[2])
+        addTextLabel(timeWidth + dayWidth * 3, 5, dayWidth, dayHeight, "목요일", 15, dayColors[3])
+        addTextLabel(timeWidth + dayWidth * 4, 5, dayWidth, dayHeight, "금요일", 15, dayColors[4])
         
         scrollPage.contentSize = CGSize(width: screenWidth, height: CGFloat(dayHeight + timeHeight * (endTime - startTime + 1) + 20))
         
@@ -101,7 +102,7 @@ class FirstViewController: UIViewController {
         // 가로
         //addLine(0, 0, Int(screenWidth), 1, UIColor.lightGray)
         var index = startTime
-        while index < endTime {
+        while index < endTime+1 {
             /*for index2 in 0...5 {
                 //addLine(timeWidth + dayWidth * index2 + 2, dayHeight + timeHeight * (index - startTime), dayWidth - 4, 1, UIColor.lightGray)
                 drawSquare(<#T##topX: Int##Int#>, <#T##topY: Int##Int#>, <#T##bottomX: Int##Int#>, <#T##bottomY: Int##Int#>)
@@ -124,7 +125,7 @@ class FirstViewController: UIViewController {
             if (timeNumber > 12) {
                 timeNumber -= 12
             }
-            addTextLabel(0, dayHeight + (index - startTime) * timeHeight, timeWidth,timeHeight, String(timeNumber), 12)
+            addTextLabel(0, dayHeight + (index - startTime) * timeHeight - 15, timeWidth,timeHeight, String(timeNumber), 12, UIColor.black)
         }
         
     }
@@ -151,7 +152,7 @@ class FirstViewController: UIViewController {
         scrollPage.addSubview(button)
     }
 
-    func addClass(_ startTime: Double, _ endTime: Double, _ day: Int, _ text: String, _ tableStart: Int, _ color: UIColor) {
+    func addClass(_ startTime: Double, _ endTime: Double, _ day: Int, _ text: String, _ tableStart: Int, _ daycolors: [UIColor]) {
         let screenWidth = UIScreen.main.bounds.width
         let button = UIButton(type: UIButtonType.custom) as UIButton
         let xPosition:CGFloat = CGFloat( timeWidth + Int(screenWidth - 30) * day / 5 )
@@ -160,20 +161,22 @@ class FirstViewController: UIViewController {
         let buttonHeight:CGFloat = CGFloat( (endTime - startTime) * Double(timeHeight) )
         let fontName = "Times New Roman"
         let fontSize = 10
+        let color = daycolors[Int(arc4random_uniform(7))]
         
         button.frame = CGRect(x: xPosition, y:yPosition, width: buttonWidth, height: buttonHeight)
         button.setTitle(text, for: UIControlState.normal)
-        button.setTitleColor(UIColor.black, for: UIControlState.normal)
-        button.tintColor = UIColor.black
+        button.setTitleColor(color, for: UIControlState.normal)
         
         button.layer.cornerRadius = 5
-        button.layer.backgroundColor = color.cgColor
-        button.layer.borderColor = UIColor.white.cgColor
-        
+        button.layer.backgroundColor = color.withAlphaComponent(0.3).cgColor
+        button.layer.borderWidth = 1
+        button.layer.borderColor = color.cgColor
+    
         
         //button.addTarget(self, action: Selector(("onClick:forEvent:")), for: UIControlEvents.touchUpInside)
         button.addTarget(self, action: #selector(pressButton(_:)), for: .touchUpInside)
         button.titleLabel?.font = UIFont(name:fontName, size: CGFloat(fontSize))
+        //button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 10)
         button.tag = pairing(Int(xPosition), Int(yPosition))
         scrollPage.addSubview(button)
     }
