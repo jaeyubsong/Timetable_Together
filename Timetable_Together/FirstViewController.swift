@@ -28,7 +28,7 @@ class FirstViewController: UIViewController {
     let timeHeight = 50
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    let dayWidth = (Int(screenWidth)-timeWidth)/5
+    let dayWidth = (Int(UIScreen.main.bounds.width)-30)/5
     let dayHeight = 40
     
     
@@ -99,7 +99,7 @@ class FirstViewController: UIViewController {
         
         // Add background lines
         // 가로
-        addLine(0, 0, Int(screenWidth), 1, UIColor.lightGray)
+        //addLine(0, 0, Int(screenWidth), 1, UIColor.lightGray)
         var index = startTime
         while index < endTime {
             /*for index2 in 0...5 {
@@ -119,7 +119,7 @@ class FirstViewController: UIViewController {
         }
         
         // Add time
-        for index in startTime...endTime+1 {
+        for index in startTime...endTime {
             var timeNumber = index
             if (timeNumber > 12) {
                 timeNumber -= 12
@@ -154,14 +154,14 @@ class FirstViewController: UIViewController {
     func addClass(_ startTime: Double, _ endTime: Double, _ day: Int, _ text: String, _ tableStart: Int, _ color: UIColor) {
         let screenWidth = UIScreen.main.bounds.width
         let button = UIButton(type: UIButtonType.custom) as UIButton
-        let xPosition:CGFloat = CGFloat( 30 + Int(screenWidth - 30) * day / 5 )
-        let yPosition:CGFloat = CGFloat( 30 + 60 * (startTime - Double(tableStart)) )
-        let buttonWidth:CGFloat = CGFloat( (screenWidth - 30) / 5 )
-        let buttonHeight:CGFloat = CGFloat( (endTime - startTime) * 60 )
+        let xPosition:CGFloat = CGFloat( timeWidth + Int(screenWidth - 30) * day / 5 )
+        let yPosition:CGFloat = CGFloat( Double(dayHeight) + Double(timeHeight) * (startTime - Double(tableStart)) )
+        let buttonWidth:CGFloat = CGFloat( (Double(screenWidth) - Double(timeWidth)) / 5 )
+        let buttonHeight:CGFloat = CGFloat( (endTime - startTime) * Double(timeHeight) )
         let fontName = "Times New Roman"
         let fontSize = 10
         
-        button.frame = CGRect(x: xPosition+2, y:yPosition+2, width: buttonWidth-4, height: buttonHeight-4)
+        button.frame = CGRect(x: xPosition, y:yPosition, width: buttonWidth, height: buttonHeight)
         button.setTitle(text, for: UIControlState.normal)
         button.setTitleColor(UIColor.black, for: UIControlState.normal)
         button.tintColor = UIColor.black
