@@ -24,12 +24,7 @@ class FirstViewController: UIViewController {
                      UIColor(red: 0.835, green: 0.655, blue: 0.051, alpha: 1),
                      UIColor(red: 0.153, green: 0.569, blue: 0.835, alpha: 1)]
     
-    let timeWidth = 30
-    let timeHeight = 50
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
-    let dayWidth = (Int(screenWidth)-timeWidth)/5
-    let dayHeight = 40
+    
     
     
     
@@ -71,7 +66,7 @@ class FirstViewController: UIViewController {
         scrollPage.addSubview(leftLine)
     }
     
-    func addTextLabel(_ x: Int, _ y: Int, _ width: Int, _ height: Int, _ text: String,  _ fontSize: Int) {
+    func addTextLabel(_ x: Int, _ y: Int, _ width: Int, _ height: Int, _ text: String,  _ fontSize: Int, _ color: UIColor) {
         
         let label = UILabel(frame: CGRect(x: x, y: y, width: width, height: height))
         // let myGreenColor = (UIColor(red: -0.108958, green: 0.714926, blue: 0.758113, alpha: 1.0))
@@ -82,18 +77,25 @@ class FirstViewController: UIViewController {
         label.text = text
         label.textAlignment = .center
         label.font = UIFont(name:"Times New Roman", size: CGFloat(fontSize))
+        label.textColor = color
         // label.layer.cornerRadius = 5
         scrollPage.addSubview(label)
     }
     
     func CreateTimeTable(startTime: Int, endTime: Int) {
+        let timeWidth = 30
+        let timeHeight = 50
+        let screenWidth = UIScreen.main.bounds.width
+        let screenHeight = UIScreen.main.bounds.height
+        let dayWidth = (Int(screenWidth)-timeWidth)/5
+        let dayHeight = 40
         
         // Add  요일
-        addTextLabel(timeWidth, 5, dayWidth, dayHeight, "월요일", 15)
-        addTextLabel(timeWidth + dayWidth, 5, dayWidth, dayHeight, "화요일", 15)
-        addTextLabel(timeWidth + dayWidth * 2, 5, dayWidth, dayHeight, "수요일", 15)
-        addTextLabel(timeWidth + dayWidth * 3, 5, dayWidth, dayHeight, "목요일", 15)
-        addTextLabel(timeWidth + dayWidth * 4, 5, dayWidth, dayHeight, "금요일", 15)
+        addTextLabel(timeWidth, 5, dayWidth, dayHeight, days[0], 15, dayColors[0])
+        addTextLabel(timeWidth + dayWidth, 5, dayWidth, dayHeight, days[1], 15, dayColors[1])
+        addTextLabel(timeWidth + dayWidth * 2, 5, dayWidth, dayHeight, days[2], 15, dayColors[2])
+        addTextLabel(timeWidth + dayWidth * 3, 5, dayWidth, dayHeight, days[3], 15, dayColors[3])
+        addTextLabel(timeWidth + dayWidth * 4, 5, dayWidth, dayHeight, days[4], 15, dayColors[4])
         
         scrollPage.contentSize = CGSize(width: screenWidth, height: CGFloat(dayHeight + timeHeight * (endTime - startTime + 1) + 20))
         
@@ -124,7 +126,7 @@ class FirstViewController: UIViewController {
             if (timeNumber > 12) {
                 timeNumber -= 12
             }
-            addTextLabel(0, dayHeight + (index - startTime) * timeHeight, timeWidth,timeHeight, String(timeNumber), 12)
+            addTextLabel(0, dayHeight + (index - startTime) * timeHeight, timeWidth,timeHeight, String(timeNumber), 12, UIColor.black)
         }
         
     }
