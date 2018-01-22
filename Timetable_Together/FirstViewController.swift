@@ -7,10 +7,32 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-class FirstViewController: UIViewController {
-    
+class FirstViewController: UIViewController{
+
+    @IBOutlet weak var searchPage: UIScrollView!
     @IBOutlet weak var scrollPage: UIScrollView!
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var searchPicker: UIPickerView!
+    @IBOutlet weak var subjectView: UITableView!
+    
+    var clickPlus = false
+    let searchType = ["과목명", "교수님"]
+    
+
+    ///plusButton
+    @IBAction func search(_ sender: Any) {
+        print("IN plus Button")
+        clickPlus = !clickPlus
+        if(clickPlus){
+            scrollPage.frame.size.height = scrollPage.frame.size.height / 2
+            searchPage.isHidden = false
+        }else{
+            searchPage.isHidden = true
+            scrollPage.frame.size.height = scrollPage.frame.size.height * 2
+        }
+    }
     
     // Tag numbers
     // Background Line: 20
@@ -37,16 +59,9 @@ class FirstViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-//        let Brown = UIColor.brown
-//        let Aquamarine = UIColor(red: 127/255, green: 255/255, blue: 212/255, alpha: 1)
-//        let PaleTurquoise = UIColor(red: 187/255, green: 255/255, blue: 255/255, alpha: 1)
-//        let RosyBrown = UIColor(red: 255/255, green: 193/255, blue: 193/255, alpha: 1)
-//        let bluish = UIColor(red: 69/255, green: 117/255, blue: 221/255, alpha: 1)
-//        let orange = UIColor(red: 223/255, green: 111/255, blue: 56/255, alpha: 1)
-        
-        
         let startTime = 8
         let endTime = 18
+        
         CreateTimeTable(startTime: startTime, endTime: endTime)
         // drawSquare(100, 600, 200, 700)
         addClass(14, 15.5, 0, "데이타구조",startTime, dayColors)
@@ -55,6 +70,10 @@ class FirstViewController: UIViewController {
         addClass(13, 14, 2, "과목2", startTime, dayColors)
         addClass(16, 18, 4, "체육과목", startTime, dayColors)
         // addTextLabel(50, 50, 100, 100, "Text Text")
+        searchPage.addSubview(searchBar)
+        searchPicker.delegate = self
+        searchPicker.dataSource = self
+        searchBar.barTintColor = UIColor(red: 0.6667, green: 0.8, blue: 0, alpha: 1.0)
         
     }
     
@@ -74,11 +93,6 @@ class FirstViewController: UIViewController {
     func addTextLabel(_ x: Int, _ y: Int, _ width: Int, _ height: Int, _ text: String,  _ fontSize: Int, _ color: UIColor) {
         
         let label = UILabel(frame: CGRect(x: x, y: y, width: width, height: height))
-        // let myGreenColor = (UIColor(red: -0.108958, green: 0.714926, blue: 0.758113, alpha: 1.0))
-        // label.center = CGPoint(x: 160, y: 285)
-        // label.layer.backgroundColor = myGreenColor.cgColor
-        // label.layer.borderColor = UIColor.black.cgColor
-        // label.layer.borderWidth = 1.0
         label.text = text
         label.textAlignment = .center
         label.font = UIFont(name:"Times New Roman", size: CGFloat(fontSize))
@@ -143,10 +157,7 @@ class FirstViewController: UIViewController {
         button.layer.backgroundColor = UIColor.lightGray.cgColor
         button.setTitle(text, for: UIControlState.normal)
         button.titleLabel?.font = UIFont(name:"Times New Roman", size: 10)
-        //button.tintColor = UIColor.black
-        
-        
-        
+
         button.addTarget(self, action: Selector(("onClick:forEvent:")), for: UIControlEvents.touchUpInside)
         button.tag = pairing(x, y)
         scrollPage.addSubview(button)
@@ -194,6 +205,7 @@ class FirstViewController: UIViewController {
     @objc func pressButton(_ button: UIButton) {
         print("Button with tag: \(button.tag) clicked!")
         print(button)
+        
     }
 
     
@@ -224,6 +236,58 @@ class FirstViewController: UIViewController {
     
 
 
+}
+
+extension FirstViewController: UIPickerViewDataSource,UIPickerViewDelegate{
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return searchType.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        var pickerLabel: UILabel? = (view as? UILabel)
+        if pickerLabel == nil {
+            pickerLabel = UILabel()
+            pickerLabel?.font = UIFont(name: "Times New Roman", size: 15)
+            pickerLabel?.textAlignment = .center
+        }
+        pickerLabel?.text = searchType[row]
+        pickerLabel?.textColor = UIColor.white
+        pickerLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        pickerView.backgroundColor = UIColor(red: 0.6667, green: 0.8, blue: 0, alpha: 1.0)
+        
+        return pickerLabel!
+    }
+}
+
+extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 8
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subjectList", for: indexPath)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
+        let add = UITableViewRowAction(style: .normal, title: "Add") { action, index in
+            print("Add button tapped")
+        }
+        add.backgroundColor = .lightGray
+        
+        return [add]
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
 }
 
 
