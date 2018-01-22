@@ -14,6 +14,7 @@
 		966ED8E12013656700B50A60 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 966ED8DF2013656700B50A60 /* Main.storyboard */; };
 		966ED8E32013656700B50A60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 966ED8E22013656700B50A60 /* Assets.xcassets */; };
 		966ED8E62013656700B50A60 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 966ED8E42013656700B50A60 /* LaunchScreen.storyboard */; };
+		CE36F74D20162975005A0ADE /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE36F74C20162975005A0ADE /* Class.swift */; };
 		CE7425F720160F2A0084FB79 /* RegisterPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7425F620160F2A0084FB79 /* RegisterPageViewController.swift */; };
 		CE7425F920160F540084FB79 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7425F820160F540084FB79 /* LoginViewController.swift */; };
 		CE7425FD20160F890084FB79 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7425FC20160F890084FB79 /* ViewController.swift */; };
@@ -30,6 +31,7 @@
 		966ED8E22013656700B50A60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		966ED8E52013656700B50A60 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		966ED8E72013656700B50A60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE36F74C20162975005A0ADE /* Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
 		CE7425F620160F2A0084FB79 /* RegisterPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPageViewController.swift; sourceTree = "<group>"; };
 		CE7425F820160F540084FB79 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		CE7425FC20160F890084FB79 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 				CE7425F620160F2A0084FB79 /* RegisterPageViewController.swift */,
 				CE7425F820160F540084FB79 /* LoginViewController.swift */,
 				CE7425FC20160F890084FB79 /* ViewController.swift */,
+				CE36F74C20162975005A0ADE /* Class.swift */,
 			);
 			path = Timetable_Together;
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE7425F720160F2A0084FB79 /* RegisterPageViewController.swift in Sources */,
+				CE36F74D20162975005A0ADE /* Class.swift in Sources */,
 				CEA2AFFD2015FDAC00255830 /* ThirdViewController.swift in Sources */,
 				966ED8DE2013656700B50A60 /* SecondViewController.swift in Sources */,
 				CE7425F920160F540084FB79 /* LoginViewController.swift in Sources */,
@@ -320,6 +324,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -369,6 +374,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -378,12 +384,13 @@
 			baseConfigurationReference = 6F2CA433B1098DF4C6C8C68F /* Pods-Timetable_Together.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9J7GDK2JXD;
 				INFOPLIST_FILE = Timetable_Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jaeyub.Timetable_Together;
+				PRODUCT_BUNDLE_IDENTIFIER = kaist.bogo.anything;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -396,12 +403,13 @@
 			baseConfigurationReference = EC47612A1FA534019BCAF421 /* Pods-Timetable_Together.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9J7GDK2JXD;
 				INFOPLIST_FILE = Timetable_Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jaeyub.Timetable_Together;
+				PRODUCT_BUNDLE_IDENTIFIER = kaist.bogo.anything;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -419,7 +427,7 @@
 				966ED8E92013656700B50A60 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		966ED8EA2013656700B50A60 /* Build configuration list for PBXNativeTarget "Timetable_Together" */ = {
 			isa = XCConfigurationList;
@@ -428,7 +436,7 @@
 				966ED8EC2013656700B50A60 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
