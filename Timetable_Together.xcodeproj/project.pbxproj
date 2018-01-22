@@ -17,6 +17,7 @@
 		CE3681AE2015FABF00E3C439 /* RegisterPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3681AD2015FABF00E3C439 /* RegisterPageViewController.swift */; };
 		CE3681B12015FAC800E3C439 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3681AF2015FAC800E3C439 /* ViewController.swift */; };
 		CE3681B22015FAC800E3C439 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3681B02015FAC800E3C439 /* LoginViewController.swift */; };
+		CEA2AFFD2015FDAC00255830 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA2AFFC2015FDAC00255830 /* ThirdViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		CE3681AD2015FABF00E3C439 /* RegisterPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegisterPageViewController.swift; path = ../../Downloads/UserLoginAndRegistration/UserLoginAndRegistration/RegisterPageViewController.swift; sourceTree = "<group>"; };
 		CE3681AF2015FAC800E3C439 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../Downloads/UserLoginAndRegistration/UserLoginAndRegistration/ViewController.swift; sourceTree = "<group>"; };
 		CE3681B02015FAC800E3C439 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ../../Downloads/UserLoginAndRegistration/UserLoginAndRegistration/LoginViewController.swift; sourceTree = "<group>"; };
+		CEA2AFFC2015FDAC00255830 /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
 		DD216563FE912EFF309722CB /* Pods_Timetable_Together.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timetable_Together.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC47612A1FA534019BCAF421 /* Pods-Timetable_Together.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timetable_Together.release.xcconfig"; path = "Pods/Target Support Files/Pods-Timetable_Together/Pods-Timetable_Together.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,11 +82,12 @@
 			children = (
 				966ED8D92013656700B50A60 /* AppDelegate.swift */,
 				966ED8DB2013656700B50A60 /* FirstViewController.swift */,
+				966ED8DD2013656700B50A60 /* SecondViewController.swift */,
+				CEA2AFFC2015FDAC00255830 /* ThirdViewController.swift */,
 				CE3681AD2015FABF00E3C439 /* RegisterPageViewController.swift */,
 				CE3681B02015FAC800E3C439 /* LoginViewController.swift */,
 				CE3681AF2015FAC800E3C439 /* ViewController.swift */,
 				966ED8DF2013656700B50A60 /* Main.storyboard */,
-				966ED8DD2013656700B50A60 /* SecondViewController.swift */,
 				966ED8E22013656700B50A60 /* Assets.xcassets */,
 				966ED8E42013656700B50A60 /* LaunchScreen.storyboard */,
 				966ED8E72013656700B50A60 /* Info.plist */,
@@ -234,6 +237,7 @@
 				CE3681B22015FAC800E3C439 /* LoginViewController.swift in Sources */,
 				CE3681B12015FAC800E3C439 /* ViewController.swift in Sources */,
 				CE3681AE2015FABF00E3C439 /* RegisterPageViewController.swift in Sources */,
+				CEA2AFFD2015FDAC00255830 /* ThirdViewController.swift in Sources */,
 				966ED8DE2013656700B50A60 /* SecondViewController.swift in Sources */,
 				966ED8DA2013656700B50A60 /* AppDelegate.swift in Sources */,
 				966ED8DC2013656700B50A60 /* FirstViewController.swift in Sources */,
