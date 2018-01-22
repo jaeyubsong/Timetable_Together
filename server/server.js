@@ -1,0 +1,13 @@
+setTimeout("document.f1.ta1.value = 'Answer Soon'", 1000)
+setTimeout("document.f1.ta1.value = ''", 1300)
+setTimeout("document.f1.ta2.value = 'Answer Soon'", 1600)
+setTimeout("document.f1.ta2.value = ''", 1900)
+setTimeout("document.f1.ta3.value = 'Answer Soon'", 2200)
+setTimeout("document.f1.ta3.value = ''", 2500)
+setTimeout("document.f3.ta4.value = 'Answer Soon'", 2800)
+setTimeout("document.f3.ta4.value = ''", 3100)
+setTimeout("document.f3.ta5.value = 'Answer Soon'", 3400)
+setTimeout("document.f3.ta5.value = ''", 3700)
+setTimeout("document.f3.ta6.value = 'Answer Soon'", 4000)
+setTimeout("document.f3.ta6.value = ''", 4300)
+const storage = "d"
