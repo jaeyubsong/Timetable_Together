@@ -14,9 +14,9 @@
 		966ED8E12013656700B50A60 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 966ED8DF2013656700B50A60 /* Main.storyboard */; };
 		966ED8E32013656700B50A60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 966ED8E22013656700B50A60 /* Assets.xcassets */; };
 		966ED8E62013656700B50A60 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 966ED8E42013656700B50A60 /* LaunchScreen.storyboard */; };
-		CE3681AE2015FABF00E3C439 /* RegisterPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3681AD2015FABF00E3C439 /* RegisterPageViewController.swift */; };
-		CE3681B12015FAC800E3C439 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3681AF2015FAC800E3C439 /* ViewController.swift */; };
-		CE3681B22015FAC800E3C439 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3681B02015FAC800E3C439 /* LoginViewController.swift */; };
+		CE7425F120160B310084FB79 /* LoginViewController 오후 9.03.27.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7425F020160B310084FB79 /* LoginViewController 오후 9.03.27.swift */; };
+		CE7425F320160B3B0084FB79 /* RegisterPageViewController .swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7425F220160B3B0084FB79 /* RegisterPageViewController .swift */; };
+		CE7425F520160B4D0084FB79 /* ViewController 오후 9.03.31.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7425F420160B4D0084FB79 /* ViewController 오후 9.03.31.swift */; };
 		CEA2AFFD2015FDAC00255830 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA2AFFC2015FDAC00255830 /* ThirdViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,9 +30,9 @@
 		966ED8E22013656700B50A60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		966ED8E52013656700B50A60 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		966ED8E72013656700B50A60 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CE3681AD2015FABF00E3C439 /* RegisterPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RegisterPageViewController.swift; path = ../../Downloads/UserLoginAndRegistration/UserLoginAndRegistration/RegisterPageViewController.swift; sourceTree = "<group>"; };
-		CE3681AF2015FAC800E3C439 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../Downloads/UserLoginAndRegistration/UserLoginAndRegistration/ViewController.swift; sourceTree = "<group>"; };
-		CE3681B02015FAC800E3C439 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ../../Downloads/UserLoginAndRegistration/UserLoginAndRegistration/LoginViewController.swift; sourceTree = "<group>"; };
+		CE7425F020160B310084FB79 /* LoginViewController 오후 9.03.27.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "LoginViewController 오후 9.03.27.swift"; path = "../../.Trash/LoginViewController 오후 9.03.27.swift"; sourceTree = "<group>"; };
+		CE7425F220160B3B0084FB79 /* RegisterPageViewController .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "RegisterPageViewController .swift"; path = "../../.Trash/RegisterPageViewController .swift"; sourceTree = "<group>"; };
+		CE7425F420160B4D0084FB79 /* ViewController 오후 9.03.31.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ViewController 오후 9.03.31.swift"; path = "../../.Trash/ViewController 오후 9.03.31.swift"; sourceTree = "<group>"; };
 		CEA2AFFC2015FDAC00255830 /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
 		DD216563FE912EFF309722CB /* Pods_Timetable_Together.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timetable_Together.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC47612A1FA534019BCAF421 /* Pods-Timetable_Together.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timetable_Together.release.xcconfig"; path = "Pods/Target Support Files/Pods-Timetable_Together/Pods-Timetable_Together.release.xcconfig"; sourceTree = "<group>"; };
@@ -84,9 +84,9 @@
 				966ED8DB2013656700B50A60 /* FirstViewController.swift */,
 				966ED8DD2013656700B50A60 /* SecondViewController.swift */,
 				CEA2AFFC2015FDAC00255830 /* ThirdViewController.swift */,
-				CE3681AD2015FABF00E3C439 /* RegisterPageViewController.swift */,
-				CE3681B02015FAC800E3C439 /* LoginViewController.swift */,
-				CE3681AF2015FAC800E3C439 /* ViewController.swift */,
+				CE7425F020160B310084FB79 /* LoginViewController 오후 9.03.27.swift */,
+				CE7425F220160B3B0084FB79 /* RegisterPageViewController .swift */,
+				CE7425F420160B4D0084FB79 /* ViewController 오후 9.03.31.swift */,
 				966ED8DF2013656700B50A60 /* Main.storyboard */,
 				966ED8E22013656700B50A60 /* Assets.xcassets */,
 				966ED8E42013656700B50A60 /* LaunchScreen.storyboard */,
@@ -234,12 +234,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE3681B22015FAC800E3C439 /* LoginViewController.swift in Sources */,
-				CE3681B12015FAC800E3C439 /* ViewController.swift in Sources */,
-				CE3681AE2015FABF00E3C439 /* RegisterPageViewController.swift in Sources */,
 				CEA2AFFD2015FDAC00255830 /* ThirdViewController.swift in Sources */,
 				966ED8DE2013656700B50A60 /* SecondViewController.swift in Sources */,
+				CE7425F320160B3B0084FB79 /* RegisterPageViewController .swift in Sources */,
+				CE7425F120160B310084FB79 /* LoginViewController 오후 9.03.27.swift in Sources */,
 				966ED8DA2013656700B50A60 /* AppDelegate.swift in Sources */,
+				CE7425F520160B4D0084FB79 /* ViewController 오후 9.03.31.swift in Sources */,
 				966ED8DC2013656700B50A60 /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,7 +380,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 249Q6H529D;
+				DEVELOPMENT_TEAM = 9J7GDK2JXD;
 				INFOPLIST_FILE = Timetable_Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaeyub.Timetable_Together;
@@ -398,7 +398,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 249Q6H529D;
+				DEVELOPMENT_TEAM = 9J7GDK2JXD;
 				INFOPLIST_FILE = Timetable_Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jaeyub.Timetable_Together;
