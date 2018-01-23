@@ -256,7 +256,13 @@ class FirstViewController: UIViewController{
     func DBdeleteAllClass(Semester: String) {
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                if (user[self.Semester] == Semester) {
+                    DBdeleteClass(CourseTitle: user[self.CourseTitle])
+                }
+            }
         } catch {
+            print(error)
         }
     }
     
@@ -269,7 +275,6 @@ class FirstViewController: UIViewController{
             for user in users {
                 if (user[self.CourseTitle].contains(CourseTitlePart)) {
                     let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
-                    classes.append(oneClass)
                     // Check for equals substring in front
                     if (user[self.CourseTitle].prefix(CourseTitlePart.count) == CourseTitlePart) {
                         firstClass.append(oneClass)
@@ -282,7 +287,7 @@ class FirstViewController: UIViewController{
             print (error)
         }
 
-        return classes
+        return insertionSortTitle(firstClass)+insertionSortTitle(secondClass)
 
     }
     
@@ -296,7 +301,6 @@ class FirstViewController: UIViewController{
                 if (user[self.Instructor].contains(InstructorPart)) {
 
                     let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
-                    classes.append(oneClass)
                     // Check for equals substring in front
                     if (user[self.Instructor].prefix(InstructorPart.count) == InstructorPart) {
                         firstClass.append(oneClass)
