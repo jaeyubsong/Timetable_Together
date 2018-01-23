@@ -11,7 +11,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--First-->
+        <!--TimeTable-->
         <scene sceneID="hNz-n2-bh7">
             <objects>
                 <viewController id="9pv-A4-QxB" customClass="FirstViewController" customModule="Timetable_Together" customModuleProvider="target" sceneMemberID="viewController">
@@ -188,7 +188,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="PQr-Ze-W5v"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
+                    <tabBarItem key="tabBarItem" title="TimeTable" image="ic_dashboard" id="acW-dT-cKf"/>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="375" height="667"/>
@@ -215,7 +215,7 @@
             </objects>
             <point key="canvasLocation" x="2101.5999999999999" y="-223.53823088455775"/>
         </scene>
-        <!--Second-->
+        <!--GradeGraph-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
                 <viewController id="8rJ-Kc-sve" customClass="SecondViewController" customModule="Timetable_Together" customModuleProvider="target" sceneMemberID="viewController">
@@ -246,13 +246,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="O1u-W8-tvY"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Second" image="second" id="cPa-gy-q4n"/>
+                    <tabBarItem key="tabBarItem" title="GradeGraph" image="ic_equalizer" id="cPa-gy-q4n"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Nw-L8-lE0" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2102" y="533"/>
         </scene>
-        <!--Third-->
+        <!--Group-->
         <scene sceneID="PxN-8j-NaK">
             <objects>
                 <viewController id="ce3-4k-bVT" customClass="ThirdViewController" customModule="Timetable_Together" customModuleProvider="target" sceneMemberID="viewController">
@@ -262,7 +262,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="QAE-Ny-KUa"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Third" id="saO-K7-pTx"/>
+                    <tabBarItem key="tabBarItem" title="Group" image="ic_group" id="saO-K7-pTx"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NHy-KE-QWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -519,10 +519,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
         <image name="ic_add_circle_outline" width="24" height="24"/>
+        <image name="ic_dashboard" width="24" height="24"/>
+        <image name="ic_equalizer" width="24" height="24"/>
+        <image name="ic_group" width="24" height="24"/>
         <image name="ic_save" width="24" height="24"/>
-        <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="R9D-Wg-YFN"/>

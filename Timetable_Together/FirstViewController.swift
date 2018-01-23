@@ -32,7 +32,6 @@ class FirstViewController: UIViewController{
     
     var filteredData = [Class]()
     
-    //update to DB
     ///end of the semester
     @IBAction func saveButton(_ sender: Any) {
         let alert = UIAlertController(title: "학기를 마치며", message: "성적을 숫자로 입력해 주세요", preferredStyle: UIAlertControllerStyle.alert)
@@ -71,7 +70,6 @@ class FirstViewController: UIViewController{
         }
     }
     ///subjectButton
-    //Do Delete
     @objc func pressButton(_ button: UIButton) {
         let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
@@ -159,16 +157,7 @@ class FirstViewController: UIViewController{
         // DBdeleteAllClass()
         DBlistClasses()
         
-        
-        
-        
         CreateTimeTable(startTime: startTime, endTime: endTime)
-//        addClass(14, 15.5, 0, "데이타구조")
-//        addClass(12, 13, 2, "운영체제")
-//        addClass(12, 13, 3, "다른과목")
-//        addClass(13, 14, 2, "과목2")
-//        addClass(16, 18, 4, "체육과목")
-        
         searchPage.addSubview(searchBar)
         
         searchPicker.delegate = self
@@ -181,6 +170,11 @@ class FirstViewController: UIViewController{
         searchPicker.tag = 1
         year.tag = 2
         semester.tag = 3
+        
+        year.selectRow(6, inComponent: 0, animated: true)
+        semester.selectRow(0, inComponent: 0, animated: true)
+        //DB 불러오기
+        
     }
     
     
@@ -271,7 +265,6 @@ class FirstViewController: UIViewController{
     func DBfindClassByTitle(CourseTitlePart: String) -> [Class] {
         var firstClass = [Class]()
         var secondClass = [Class]()
-        //var classes = [Class]()
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
@@ -295,7 +288,6 @@ class FirstViewController: UIViewController{
     func DBfindClassByInstructor(InstructorPart: String) -> [Class] {
         var firstClass = [Class]()
         var secondClass = [Class]()
-        //var classes = [Class]()
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
@@ -313,23 +305,9 @@ class FirstViewController: UIViewController{
         } catch {
             print (error)
         }
-        //print(classes[0].CourseNum)
         return insertionSortInstructor(firstClass) + insertionSortInstructor(secondClass)
     }
-    
-//    func SortByTitle(classArray: [Class]) -> [Class]{
-//        var returnArray = deepCopy(targetClass: classArray)
-//        for i in (0...classArray.count-1).reversed() {
-//            for j in 1...i {
-//                if (returnArray[j].CourseTitle > returnArray[j-1].CourseTitle) {
-//                    var temp = returnArray[j-1]
-//                    returnArray[j-1] = returnArray[j]
-//                    returnArray[j] = temp
-//                }
-//            }
-//        }
-//        return classArray
-//    }
+
     
     func insertionSortTitle(_ classArray: [Class]) -> [Class] {
         var a = classArray
@@ -651,10 +629,24 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
         let add = UITableViewRowAction(style: .normal, title: "Add") { action, index in
             print("Add button tapped")
             
-            let times = self.filteredData[editActionsForRowAt.row].ClassTime.split(separator: "\n")
-            let text = self.filteredData[editActionsForRowAt.row].CourseTitle + "\n" + self.filteredData[editActionsForRowAt.row].Classroom
+            let department = self.filteredData[editActionsForRowAt.row].Department
+            let courseType = self.filteredData[editActionsForRowAt.row].CourseType
+            let courseNum = self.filteredData[editActionsForRowAt.row].CourseNum
+            let section = self.filteredData[editActionsForRowAt.row].Section
+            let courseTitle = self.filteredData[editActionsForRowAt.row].CourseTitle
+            let au = self.filteredData[editActionsForRowAt.row].AU
+            let credit = self.filteredData[editActionsForRowAt.row].Credit
+            let instructor = self.filteredData[editActionsForRowAt.row].Instructor
+            let classtime = self.filteredData[editActionsForRowAt.row].ClassTime
+            let classroom = self.filteredData[editActionsForRowAt.row].Classroom
+            let semester = self.filteredData[editActionsForRowAt.row].Semester
+            let grade = self.filteredData[editActionsForRowAt.row].Grade
+            
+            let times = classtime.split(separator: "\n")
+            let text = courseTitle + "\n" + classroom
             let userId = self.filteredData[editActionsForRowAt.row].userId
             
+            self.DBinsertClass(Department: department, CourseType: courseType, CourseNum: courseNum, Section: section, CourseTitle: courseTitle, AU: au, Credit: credit, Instructor: instructor, ClassTime: classtime, Classroom: classroom, Semester: semester, Grade: grade)
             self.addClass(times, text, userId)
         }
         add.backgroundColor = .lightGray
