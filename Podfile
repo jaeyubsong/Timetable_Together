@@ -9,4 +9,6 @@ target 'Timetable_Together' do
   
   pod 'Alamofire','4.5'
   pod 'SwiftyJSON'
+  pod 'SQLite.swift','~> 0.11.4'
+
 end

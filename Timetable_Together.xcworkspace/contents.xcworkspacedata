@@ -10,4 +10,7 @@
    <FileRef
       location = "group:SQLite.swift-master/SQLite.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Timetable_Together.xcodeproj">
+   </FileRef>
 </Workspace>

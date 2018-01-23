@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "667DE97947628C9BD4FA75831448E2BB"
+               BlueprintIdentifier = "8A7DE2B65794CE2E2840C3767E58736B"
                BuildableName = "Pods_Timetable_Together.framework"
                BlueprintName = "Pods-Timetable_Together"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "667DE97947628C9BD4FA75831448E2BB"
+            BlueprintIdentifier = "8A7DE2B65794CE2E2840C3767E58736B"
             BuildableName = "Pods_Timetable_Together.framework"
             BlueprintName = "Pods-Timetable_Together"
             ReferencedContainer = "container:Pods.xcodeproj">
