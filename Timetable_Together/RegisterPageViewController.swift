@@ -10,17 +10,24 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class RegisterPageViewController: UIViewController {
+class RegisterPageViewController: UIViewController{
+    
+    
+    @IBOutlet weak var userschoolTextField: UITextField!
+    
     @IBOutlet weak var userStudentidTextField: UITextField!
     @IBOutlet weak var userPasswordTextField: UITextField!
     @IBOutlet weak var repeatPasswordTextField: UITextField!
     
+    let schoollist = ["KAIST", "한양대", "숙명여대","연세대"]
+    var userSchool : String?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
+        createSchoolPicker()
+        createToolbar()
+        self.navigationController?.navigationBar.tintColor = UIColor.black
         // Do any additional setup after loading the view.
     }
     
@@ -57,12 +64,14 @@ class RegisterPageViewController: UIViewController {
         print(userPassword!)
         print(userRepeatPassword!)
         
+        
         let userinformation = [
             "studentid" : userStudentid!,
-            "password" : userPassword!
+            "password" : userPassword!,
+            "school" : userSchool!
         ]
         
-        let url = "http://143.248.132.154:80/"
+        let url = "http://143.248.140.251:80/"
         
         Alamofire.request(url + "post", method:.post, parameters:userinformation,encoding: JSONEncoding.default).responseString { response in
             switch response.result {
@@ -77,11 +86,7 @@ class RegisterPageViewController: UIViewController {
             }
         }
         
-        
         // Display alert message with confirmation.
-        
-        
-        
     }
     
     func displayMyAlertMessage(userMessage : String)
@@ -113,15 +118,46 @@ class RegisterPageViewController: UIViewController {
         
     }
     
+    func createSchoolPicker(){
+        let schoolPicker = UIPickerView()
+        schoolPicker.delegate = self
+        userschoolTextField.inputView = schoolPicker
+    }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    func createToolbar(){
+        let toolBar = UIToolbar()
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.dismissKeyboard))
+        toolBar.setItems([doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
+        userschoolTextField.inputAccessoryView = toolBar
+    }
+    
+    @objc func dismissKeyboard(){
+        view.endEditing(true)
+    }
+    
+}
+
+extension RegisterPageViewController: UIPickerViewDataSource, UIPickerViewDelegate{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return schoollist.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return schoollist[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        userSchool = schoollist[row]
+        userschoolTextField.text = userSchool
+        
+    }
     
 }

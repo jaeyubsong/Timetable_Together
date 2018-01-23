@@ -107,13 +107,13 @@
 				966ED8DD2013656700B50A60 /* SecondViewController.swift */,
 				CEA2AFFC2015FDAC00255830 /* ThirdViewController.swift */,
 				966ED8DF2013656700B50A60 /* Main.storyboard */,
+				CE36F74C20162975005A0ADE /* Class.swift */,
 				966ED8E22013656700B50A60 /* Assets.xcassets */,
 				966ED8E42013656700B50A60 /* LaunchScreen.storyboard */,
 				966ED8E72013656700B50A60 /* Info.plist */,
 				CE7425F620160F2A0084FB79 /* RegisterPageViewController.swift */,
 				CE7425F820160F540084FB79 /* LoginViewController.swift */,
 				CE7425FC20160F890084FB79 /* ViewController.swift */,
-				CE36F74C20162975005A0ADE /* Class.swift */,
 			);
 			path = Timetable_Together;
 			sourceTree = "<group>";
@@ -411,10 +411,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 249Q6H529D;
+				DEVELOPMENT_TEAM = 6H49AR6Z4M;
 				INFOPLIST_FILE = Timetable_Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jaeyub.TimeTableApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.un.UserLoginAndRegistration;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -430,10 +430,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 249Q6H529D;
+				DEVELOPMENT_TEAM = 6H49AR6Z4M;
 				INFOPLIST_FILE = Timetable_Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jaeyub.TimeTableApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.un.UserLoginAndRegistration;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

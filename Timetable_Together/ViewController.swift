@@ -12,8 +12,14 @@ import SwiftyJSON
 
 class ViewController: UIViewController {
     
+    // let isuserloggedin = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
+    let isuserloggedin = true
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(isuserloggedin)
+        
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -22,13 +28,14 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func ToLoginButton(_ sender: Any) {
-        self.performSegue(withIdentifier: "loginView", sender: self)
-    }
     
-    override func viewDidAppear(_ animated: Bool)
-    {
-        
+    override func viewDidAppear(_ animated: Bool){
+        if(isuserloggedin){
+            self.performSegue(withIdentifier: "totab", sender: self)
+        }
+        else{
+            self.performSegue(withIdentifier: "loginView", sender: self)
+        }
     }
     
     
