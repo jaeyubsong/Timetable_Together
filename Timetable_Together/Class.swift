@@ -8,7 +8,7 @@
 
 class Class {
     
-    var userId: String
+    var userId: Int
     var Department: String
     var CourseType: String
     var CourseNum: String
@@ -23,7 +23,7 @@ class Class {
     var Grade: String
 
     
-    init(userId: String, Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: String, Classroom: String, Semester: String, Grade: String ){
+    init(userId: Int, Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: String, Classroom: String, Semester: String, Grade: String ){
         
         self.userId = userId
         self.Department = Department
