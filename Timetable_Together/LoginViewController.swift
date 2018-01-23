@@ -75,7 +75,7 @@ class LoginViewController: UIViewController {
             UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
             print(serverresponse)
             
-            let url = "http://143.248.132.154:80/"
+            let url = "http://143.248.140.251:80/"
             
             Alamofire.request(url + serverresponse ).responseJSON { response in
                 switch response.result{

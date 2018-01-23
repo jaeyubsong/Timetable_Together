@@ -492,7 +492,7 @@ extension FirstViewController: UISearchBarDelegate {
             print(filteredData)
             subjectView.reloadData()
         }else{
-            print("교수님")
+            print("교수님") 
             isSearching = true
             filteredData = DBfindClassByInstructor(InstructorPart: searchBar.text! )
             subjectView.reloadData()

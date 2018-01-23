@@ -71,7 +71,7 @@ class RegisterPageViewController: UIViewController{
             "school" : userSchool!
         ]
         
-        let url = "http://143.248.132.154:80/"
+        let url = "http://143.248.140.251:80/"
         
         Alamofire.request(url + "post", method:.post, parameters:userinformation,encoding: JSONEncoding.default).responseString { response in
             switch response.result {

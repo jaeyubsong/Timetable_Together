@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -259,14 +259,58 @@
                     <view key="view" contentMode="scaleToFill" id="w8p-7Z-kUm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="guf-Pl-nWB">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="소속 관리" id="1gd-tp-TUU"/>
+                                </items>
+                                <connections>
+                                    <outlet property="delegate" destination="ce3-4k-bVT" id="bjq-Ha-uab"/>
+                                </connections>
+                            </navigationBar>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EGb-1e-3wz">
+                                <rect key="frame" x="0.0" y="63" width="375" height="56"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ce3-4k-bVT" id="VsA-Ya-v4N"/>
+                                </connections>
+                            </searchBar>
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NWY-3N-E2h">
+                                <rect key="frame" x="0.0" y="117" width="375" height="498"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="ce3-4k-bVT" id="2ha-75-Bh4"/>
+                                    <outlet property="delegate" destination="ce3-4k-bVT" id="IZC-8F-Qpw"/>
+                                </connections>
+                            </tableView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6u5-yW-8Sp">
+                                <rect key="frame" x="0.0" y="117" width="375" height="499"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="ce3-4k-bVT" id="7CW-pp-Wmm"/>
+                                    <outlet property="delegate" destination="ce3-4k-bVT" id="Mlm-cC-pJH"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="QAE-Ny-KUa"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Third" id="saO-K7-pTx"/>
+                    <connections>
+                        <outlet property="NaviBar" destination="guf-Pl-nWB" id="0La-m4-wPt"/>
+                        <outlet property="SearchBarList" destination="EGb-1e-3wz" id="lNF-S3-Iww"/>
+                        <outlet property="allGroup" destination="NWY-3N-E2h" id="Uex-BU-QqE"/>
+                        <outlet property="myGroup" destination="6u5-yW-8Sp" id="MJn-lo-hGI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NHy-KE-QWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2102" y="1263"/>
+            <point key="canvasLocation" x="2101.5999999999999" y="1262.5187406296852"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -532,7 +576,7 @@
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="R9D-Wg-YFN"/>
+        <segue reference="jhn-FM-0rV"/>
         <segue reference="9Ii-Gg-3D6"/>
         <segue reference="C0I-KL-p9s"/>
     </inferredMetricsTieBreakers>
