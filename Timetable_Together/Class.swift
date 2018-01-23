@@ -16,13 +16,15 @@ class Class {
     var AU: String
     var Credit: String
     var Instructor: String
-    var ClassTime: [(String,String)]
+    var ClassTime: String
     var Classroom: String
+    var Semester: String
+    var Grade: String
     
     
     var grade: String?
     
-    init(Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: [(String,String)],Classroom: String, grade: String? ){
+    init(Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: String, Classroom: String, Semester: String, Grade: String ){
         
         self.Department = Department
         self.CourseType = CourseType
@@ -34,7 +36,7 @@ class Class {
         self.Instructor = Instructor
         self.ClassTime = ClassTime
         self.Classroom = Classroom
-        self.grade = grade
-        
+        self.Grade = Grade
+        self.Semester = Semester
     }
 }

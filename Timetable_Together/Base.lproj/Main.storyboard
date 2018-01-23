@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uI0-Gb-zg1">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -63,13 +63,52 @@
                                             <constraint firstAttribute="height" constant="240" id="60a-N7-Sb2"/>
                                         </constraints>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subjectList" rowHeight="24" id="dBl-yy-1Zy">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="24"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subjectList" rowHeight="70" id="dBl-yy-1Zy" customClass="CustomCell" customModule="Timetable_Together" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="28" width="375" height="70"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="dBl-yy-1Zy" id="Jqg-k3-I72">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="23.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="69.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Classroom" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rLh-up-jPO">
+                                                            <rect key="frame" x="15" y="43" width="360" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="CourseTitle/Instructor" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w5o-pj-Y8Y">
+                                                            <rect key="frame" x="15" y="0.0" width="360" height="21"/>
+                                                            <accessibility key="accessibilityConfiguration">
+                                                                <accessibilityTraits key="traits" staticText="YES" header="YES"/>
+                                                            </accessibility>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="ClassTime" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LKc-2q-tX2">
+                                                            <rect key="frame" x="15" y="24" width="360" height="21"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="w5o-pj-Y8Y" firstAttribute="top" secondItem="Jqg-k3-I72" secondAttribute="top" id="4DD-5z-pNs"/>
+                                                        <constraint firstAttribute="bottom" secondItem="rLh-up-jPO" secondAttribute="bottom" constant="5.5" id="6e9-OD-lLT"/>
+                                                        <constraint firstAttribute="bottom" secondItem="w5o-pj-Y8Y" secondAttribute="bottom" constant="48.5" id="6zr-vH-4n0"/>
+                                                        <constraint firstItem="LKc-2q-tX2" firstAttribute="top" secondItem="Jqg-k3-I72" secondAttribute="top" constant="24" id="Eqs-zl-6rB"/>
+                                                        <constraint firstItem="rLh-up-jPO" firstAttribute="leading" secondItem="Jqg-k3-I72" secondAttribute="leading" constant="15" id="TB1-GI-cp3"/>
+                                                        <constraint firstItem="LKc-2q-tX2" firstAttribute="leading" secondItem="Jqg-k3-I72" secondAttribute="leading" constant="15" id="b7s-rW-qtl"/>
+                                                        <constraint firstItem="w5o-pj-Y8Y" firstAttribute="leading" secondItem="Jqg-k3-I72" secondAttribute="leading" constant="15" id="hdu-1x-44E"/>
+                                                        <constraint firstAttribute="bottom" secondItem="LKc-2q-tX2" secondAttribute="bottom" constant="24.5" id="jqJ-p7-aYm"/>
+                                                        <constraint firstItem="rLh-up-jPO" firstAttribute="top" secondItem="Jqg-k3-I72" secondAttribute="top" constant="43" id="qO1-Fs-vaZ"/>
+                                                    </constraints>
                                                 </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="ClassTime" destination="LKc-2q-tX2" id="StY-UY-g4W"/>
+                                                    <outlet property="Classroom" destination="rLh-up-jPO" id="pDf-gb-AZq"/>
+                                                    <outlet property="CourseTitlewithInstructor" destination="w5o-pj-Y8Y" id="uOz-sY-7KC"/>
+                                                </connections>
                                             </tableViewCell>
                                         </prototypes>
                                         <connections>
@@ -493,8 +532,8 @@
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="jhn-FM-0rV"/>
-        <segue reference="b3z-ZY-Fm0"/>
-        <segue reference="460-51-yrH"/>
+        <segue reference="R9D-Wg-YFN"/>
+        <segue reference="9Ii-Gg-3D6"/>
+        <segue reference="C0I-KL-p9s"/>
     </inferredMetricsTieBreakers>
 </document>

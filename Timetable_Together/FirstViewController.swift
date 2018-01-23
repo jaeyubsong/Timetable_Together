@@ -21,14 +21,16 @@ class FirstViewController: UIViewController{
     @IBOutlet weak var year: UIPickerView!
     @IBOutlet weak var semester: UIPickerView!
     
-    
+    var timer = Timer.self
     var clickPlus = false
     var isSearching = false
     let searchType = ["과목명", "교수님"]
     let semesterType = ["봄", "가을"]
     let yearType = ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
-    var filteredData = [[String]]()
-
+    
+    var filteredData = [Class]()
+    //var searchTypeBool = true ///true: 과목명 false: 교수님
+    
     //update to DB
     ///end of the semester
     @IBAction func saveButton(_ sender: Any) {
@@ -112,14 +114,18 @@ class FirstViewController: UIViewController{
         // 중복과목은 CourseNum을 통해서 같은 항목 추가 안함
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
-        
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS316", Section: "", CourseTitle: "이산 아무거나", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS311", Section: "", CourseTitle: "전산기조직", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS315", Section: "", CourseTitle: "이산 수학", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS320", Section: "", CourseTitle: "프로그래밍언어", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
             "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
+         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS319", Section: "", CourseTitle: "중간에 이산 끝", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
         
-        DBdeleteClass(CourseNum: "CS204")
-        DBdeleteAllClass()
+        //DBdeleteClass(CourseNum: "CS204")
+        DBfindClassByTitle(CourseTitlePart: "전산")
+        DBfindClassByInstructor(InstructorPart: "석영")
+        // DBdeleteAllClass()
         DBlistClasses()
         
         
@@ -224,6 +230,40 @@ class FirstViewController: UIViewController{
         
     }
     
+    func DBfindClassByTitle(CourseTitlePart: String) -> [Class] {
+        var classes = [Class]()
+        do {
+            let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                if (user[self.CourseTitle].contains(CourseTitlePart)) {
+                    let oneClass = Class(Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
+                    classes.append(oneClass)
+                }
+            }
+        } catch {
+            print (error)
+        }
+        //print(classes[1].CourseNum)
+        //print(classes.count)
+        return classes
+    }
+    
+    func DBfindClassByInstructor(InstructorPart: String) -> [Class] {
+        var classes = [Class]()
+        do {
+            let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                if (user[self.Instructor].contains(InstructorPart)) {
+                    let oneClass = Class(Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
+                    classes.append(oneClass)
+                }
+            }
+        } catch {
+            print (error)
+        }
+        print(classes[0].CourseNum)
+        return classes
+    }
     
     func DBlistClasses() {
         do {
@@ -330,7 +370,7 @@ class FirstViewController: UIViewController{
         button.layer.borderWidth = 1
         button.layer.borderColor = color.cgColor
     
-        button.tag = pairing(Int(xPosition), Int(yPosition))
+        button.tag = 10
         button.addTarget(self, action: #selector(pressButton(_:)), for: .touchUpInside)
         
         scrollPage.addSubview(button)
@@ -366,7 +406,7 @@ class FirstViewController: UIViewController{
         return Int( (a + b) * (a + b + 1) / 2 + b )
     }
 
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -415,40 +455,87 @@ extension FirstViewController: UIPickerViewDataSource,UIPickerViewDelegate{
 }
 
 extension FirstViewController: UISearchBarDelegate {
-
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    
 //
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 //        if (searchBar.text == nil || searchBar.text == ""){
 //
 //            isSearching = false
 //            view.endEditing(true)
 //            subjectView.reloadData()
 //
-//        }else{
-//
+//        }else if searchType[searchPicker.selectedRow(inComponent: 0)] == "과목명" {
+//            print(searchBar.text!)
 //            isSearching = true
-//            //filteredData = data.filter({$0 == searchBar.text})
+//            filteredData = DBfindClassByTitle( CourseTitlePart: searchBar.text! )
+//            print(filteredData)
 //            subjectView.reloadData()
-//
+//        }else{
+//            print("교수님")
+//            isSearching = true
+//            filteredData = DBfindClassByInstructor(InstructorPart: searchBar.text! )
+//            subjectView.reloadData()
 //        }
 //    }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if (searchBar.text == nil || searchBar.text == ""){
+            
+            isSearching = false
+            view.endEditing(true)
+            subjectView.reloadData()
+            
+        }else if searchType[searchPicker.selectedRow(inComponent: 0)] == "과목명" {
+            print(searchBar.text!)
+            isSearching = true
+            filteredData = DBfindClassByTitle( CourseTitlePart: searchBar.text! )
+            print(filteredData)
+            subjectView.reloadData()
+        }else{
+            print("교수님")
+            isSearching = true
+            filteredData = DBfindClassByInstructor(InstructorPart: searchBar.text! )
+            subjectView.reloadData()
+        }
+    }
 }
 
 extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(isSearching){
-            return filteredData.count
-        }
-        return 8
+//        if(isSearching){
+//            return filteredData.count
+//        }
+        return filteredData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "subjectList", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subjectList", for: indexPath) as! CustomCell
         
         if isSearching {
-            //text = filteredData[indexPath]["CourseTitle"] + "\n" + filteredData[indexPath]
+            let times = filteredData[indexPath.row].ClassTime.split(separator: "\n")
+            if (filteredData[indexPath.row].Section == ""){
+                cell.CourseTitlewithInstructor.text = filteredData[indexPath.row].CourseTitle + " / " + filteredData[indexPath.row].Instructor
+            }else{
+                cell.CourseTitlewithInstructor.text = filteredData[indexPath.row].CourseTitle + " / " + filteredData[indexPath.row].Section + " / " + filteredData[indexPath.row].Instructor
+            }
+            
+            //cell.ClassTime.text = filteredData[indexPath.row].ClassTime.split(separator: '\n')
+            cell.Classroom.text = filteredData[indexPath.row].Classroom
+            for time in 0...(times.count-1){
+                
+                if(time==0){
+                    cell.ClassTime.text = times[time] + " / "
+                }else if(time+1 < times.count){
+                    cell.ClassTime.text = cell.ClassTime.text! + times[time] + " / "
+                }else{
+                    cell.ClassTime.text = cell.ClassTime.text! + times[time]
+                }
+                
+            }
+            
+            cell.ClassTime.font.withSize(10)
+            cell.Classroom.font.withSize(10)
         }
         return cell
     }
@@ -469,6 +556,13 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
         return true
     }
 
+}
+
+
+class CustomCell: UITableViewCell{
+    @IBOutlet weak var CourseTitlewithInstructor: UILabel!
+    @IBOutlet weak var ClassTime: UILabel!
+    @IBOutlet weak var Classroom: UILabel!
 }
 
 
