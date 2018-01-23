@@ -29,12 +29,31 @@ class FirstViewController: UIViewController{
     let yearType = ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
     
     var filteredData = [Class]()
-    //var searchTypeBool = true ///true: 과목명 false: 교수님
     
     //update to DB
     ///end of the semester
     @IBAction func saveButton(_ sender: Any) {
-        
+        let alert = UIAlertController(title: "학기를 마치며", message: "성적을 숫자로 입력해 주세요", preferredStyle: UIAlertControllerStyle.alert)
+        var subjectOrder = [String]()
+        do{
+            let subjects = try self.databaseUser.prepare(self.usersTable)
+            for subject in subjects{
+                alert.addTextField { (textField) in
+                    textField.placeholder = subject[self.CourseTitle]
+                    subjectOrder.append(subject[self.CourseTitle])
+                }
+            }
+        }catch{
+            print(error)
+        }
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+            for index in 0...((alert?.textFields!.count)!-1){
+                let textField = alert?.textFields![index] // Force unwrapping because we know it exists.
+                self.DBupdateGrade(CourseNum: subjectOrder[index], Grade: (textField?.text!)!)
+            }
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     ///plusButton
@@ -56,7 +75,9 @@ class FirstViewController: UIViewController{
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
             (action: UIAlertAction!) in
-            //button delete
+            self.removeClass(tag: button.tag)
+            let Title = button.titleLabel!.text!.split(separator: "\n")[0]
+            self.DBdeleteClass(CourseTitle: String(Title))
             print("Do Delete: " + String(button.tag))
         }))
         self.present(alert,animated: true,completion: nil)
@@ -97,6 +118,9 @@ class FirstViewController: UIViewController{
     let Grade = Expression<String>("Grade")
     
     
+    var startTime = 8
+    var endTime = 18
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -122,23 +146,20 @@ class FirstViewController: UIViewController{
          DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS319", Section: "", CourseTitle: "중간에 이산 끝", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
         
-        //DBdeleteClass(CourseNum: "CS204")
         DBfindClassByTitle(CourseTitlePart: "전산")
         DBfindClassByInstructor(InstructorPart: "석영")
         // DBdeleteAllClass()
         DBlistClasses()
         
         
-        let startTime = 8
-        let endTime = 18
+        
         
         CreateTimeTable(startTime: startTime, endTime: endTime)
-        addClass(14, 15.5, 0, "데이타구조",startTime, dayColors)
-        addClass(12, 13, 2, "운영체제", startTime, dayColors)
-        addClass(12, 13, 3, "다른과목", startTime, dayColors)
-        addClass(13, 14, 2, "과목2", startTime, dayColors)
-        addClass(16, 18, 4, "체육과목", startTime, dayColors)
-        removeClass(startTime: 13, tableStart: startTime, day: 2)
+        addClass(14, 15.5, 0, "데이타구조")
+        addClass(12, 13, 2, "운영체제")
+        addClass(12, 13, 3, "다른과목")
+        addClass(13, 14, 2, "과목2")
+        addClass(16, 18, 4, "체육과목")
         
         searchPage.addSubview(searchBar)
         
@@ -216,8 +237,8 @@ class FirstViewController: UIViewController{
         }
     }
     
-    func DBdeleteClass(CourseNum: String) {
-        let userClass = self.usersTable.filter(self.CourseNum == CourseNum)
+    func DBdeleteClass(CourseTitle: String) {
+        let userClass = self.usersTable.filter(self.CourseTitle == CourseTitle)
         let deleteClass = userClass.delete()
         do {
             try self.databaseUser.run(deleteClass)
@@ -236,15 +257,13 @@ class FirstViewController: UIViewController{
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 if (user[self.CourseTitle].contains(CourseTitlePart)) {
-                    let oneClass = Class(Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
+                    let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
                     classes.append(oneClass)
                 }
             }
         } catch {
             print (error)
         }
-        //print(classes[1].CourseNum)
-        //print(classes.count)
         return classes
     }
     
@@ -254,7 +273,7 @@ class FirstViewController: UIViewController{
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 if (user[self.Instructor].contains(InstructorPart)) {
-                    let oneClass = Class(Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
+                    let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
                     classes.append(oneClass)
                 }
             }
@@ -305,9 +324,6 @@ class FirstViewController: UIViewController{
         
         scrollPage.contentSize = CGSize(width: screenWidth, height: CGFloat(dayHeight + timeHeight * (endTime - startTime + 1) + 20))
         
-        /// Add background lines
-        /// 가로
-        
         var index = startTime
         while index < endTime+1 {
             drawSquare(0, dayHeight + (index - startTime) * timeHeight, Int(screenWidth), dayHeight + (index - startTime + 1) * timeHeight, UIColor(red: 0.914, green: 0.914, blue: 0.906, alpha: 1))
@@ -347,41 +363,61 @@ class FirstViewController: UIViewController{
         scrollPage.addSubview(button)
         
     }
+    
+    func time2Double(_ time: String) -> Double {
+        let h = Double(time.split(separator: ":")[0])
+        let m = time.split(separator: ":")[1]
+        if(m=="00"){
+            return h!
+        }else{
+            return Double(h!+0.5)
+        }
+    }
 
-    func addClass(_ startTime: Double, _ endTime: Double, _ day: Int, _ text: String, _ tableStart: Int, _ daycolors: [UIColor]) {
+    func addClass(_ time: [String], _ text: String, _ userId: Int) {
         let screenWidth = UIScreen.main.bounds.width
-        let button = UIButton(type: UIButtonType.custom) as UIButton
-        let xPosition:CGFloat = CGFloat( timeWidth + Int(screenWidth - 30) * day / 5 )
-        let yPosition:CGFloat = CGFloat( Double(dayHeight) + Double(timeHeight) * (startTime - Double(tableStart)) )
-        let buttonWidth:CGFloat = CGFloat( (Double(screenWidth) - Double(timeWidth)) / 5 )
-        let buttonHeight:CGFloat = CGFloat( (endTime - startTime) * Double(timeHeight) )
+        let color = dayColors[Int(arc4random_uniform(7))]
         let fontName = "Times New Roman"
         let fontSize = 10
-        let color = daycolors[Int(arc4random_uniform(7))]
         
-        button.frame = CGRect(x: xPosition, y:yPosition, width: buttonWidth, height: buttonHeight)
-        button.setTitle(text, for: UIControlState.normal)
-        button.setTitleColor(color, for: UIControlState.normal)
-        button.titleLabel?.font = UIFont(name:fontName, size: CGFloat(fontSize))
-        //button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 10)
+        for i in 0...time.count-1{
+            
+            let button = UIButton(type: UIButtonType.custom) as UIButton
+            let day = time[i].split(separator: " ")[0]
+            let devide = time[i].split(separator: " ")[1].split(separator: "~")
+            let ClassStart = time2Double(devide[0])
+            let ClassEnd = time2Double(devide[1])
+            let xPosition:CGFloat = CGFloat( timeWidth + Int(screenWidth - 30) * day / 5 )
+            let yPosition:CGFloat = CGFloat( Double(dayHeight) + Double(timeHeight) * (ClassStart - Double(startTime)))
+            let buttonWidth:CGFloat = CGFloat( (Double(screenWidth) - Double(timeWidth)) / 5 )
+            let buttonHeight:CGFloat = CGFloat( (ClassEnd - ClassStart) * Double(timeHeight) )
+            button.frame = CGRect(x: xPosition, y:yPosition, width: buttonWidth, height: buttonHeight)
+            button.setTitle(text, for: UIControlState.normal)
+            
+            button.setTitleColor(color, for: UIControlState.normal)
+            button.titleLabel?.font = UIFont(name:fontName, size: CGFloat(fontSize))
+            //button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 10)
+            
+            button.layer.cornerRadius = 5
+            button.layer.backgroundColor = color.withAlphaComponent(0.3).cgColor
+            button.layer.borderWidth = 1
+            button.layer.borderColor = color.cgColor
+            
+            button.tag = userId
+            button.addTarget(self, action: #selector(pressButton(_:)), for: .touchUpInside)
+            scrollPage.addSubview(button)
+        }
         
-        button.layer.cornerRadius = 5
-        button.layer.backgroundColor = color.withAlphaComponent(0.3).cgColor
-        button.layer.borderWidth = 1
-        button.layer.borderColor = color.cgColor
-    
-        button.tag = 10
-        button.addTarget(self, action: #selector(pressButton(_:)), for: .touchUpInside)
         
-        scrollPage.addSubview(button)
+        
+        
+        
 
     }
     
-    func removeClass(startTime: Double, tableStart: Int, day: Int) {
-        let xPosition = (timeWidth + Int(screenWidth - 30) * day / 5)
-        let yPosition = Int( (Double(dayHeight) + Double(timeHeight) * (startTime - Double(tableStart))) )
+    func removeClass(tag: Int) {
         for button in scrollPage.subviews {
-            if( button.tag == pairing(xPosition, yPosition)) {
+            if( button.tag == tag) {
                 button.removeFromSuperview()
             }
         }
@@ -456,28 +492,6 @@ extension FirstViewController: UIPickerViewDataSource,UIPickerViewDelegate{
 
 extension FirstViewController: UISearchBarDelegate {
     
-//
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        if (searchBar.text == nil || searchBar.text == ""){
-//
-//            isSearching = false
-//            view.endEditing(true)
-//            subjectView.reloadData()
-//
-//        }else if searchType[searchPicker.selectedRow(inComponent: 0)] == "과목명" {
-//            print(searchBar.text!)
-//            isSearching = true
-//            filteredData = DBfindClassByTitle( CourseTitlePart: searchBar.text! )
-//            print(filteredData)
-//            subjectView.reloadData()
-//        }else{
-//            print("교수님")
-//            isSearching = true
-//            filteredData = DBfindClassByInstructor(InstructorPart: searchBar.text! )
-//            subjectView.reloadData()
-//        }
-//    }
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if (searchBar.text == nil || searchBar.text == ""){
             
@@ -503,9 +517,7 @@ extension FirstViewController: UISearchBarDelegate {
 extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if(isSearching){
-//            return filteredData.count
-//        }
+
         return filteredData.count
     }
     
@@ -520,7 +532,6 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
                 cell.CourseTitlewithInstructor.text = filteredData[indexPath.row].CourseTitle + " / " + filteredData[indexPath.row].Section + " / " + filteredData[indexPath.row].Instructor
             }
             
-            //cell.ClassTime.text = filteredData[indexPath.row].ClassTime.split(separator: '\n')
             cell.Classroom.text = filteredData[indexPath.row].Classroom
             for time in 0...(times.count-1){
                 
@@ -533,7 +544,6 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
                 }
                 
             }
-            
             cell.ClassTime.font.withSize(10)
             cell.Classroom.font.withSize(10)
         }
@@ -544,8 +554,14 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
         let add = UITableViewRowAction(style: .normal, title: "Add") { action, index in
             print("Add button tapped")
             //push to local DB
+   
+            //addClass(<#T##ClassStart: Double##Double#>, <#T##ClassEnd: Double##Double#>, <#T##day: Int##Int#>, <#T##text: String##String#>)
             
-            //addButton(<#T##x: Int##Int#>, <#T##y: Int##Int#>, <#T##width: Int##Int#>, <#T##height: Int##Int#>, <#T##text: String##String#>)
+            let times = self.filteredData[editActionsForRowAt.row].ClassTime.split(separator: "\n")
+            let text = self.filteredData[editActionsForRowAt.row].CourseTitle + "\n" + filteredData[editActionsForRowAt.row].Classroom
+            let userId = filteredData[editActionsForRowAt.row].
+            
+            addClass(times, text, <#T##userId: Int##Int#>)
         }
         add.backgroundColor = .lightGray
         

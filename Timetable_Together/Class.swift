@@ -8,6 +8,7 @@
 
 class Class {
     
+    var userId: String
     var Department: String
     var CourseType: String
     var CourseNum: String
@@ -20,12 +21,11 @@ class Class {
     var Classroom: String
     var Semester: String
     var Grade: String
+
     
-    
-    var grade: String?
-    
-    init(Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: String, Classroom: String, Semester: String, Grade: String ){
+    init(userId: String, Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: String, Classroom: String, Semester: String, Grade: String ){
         
+        self.userId = userId
         self.Department = Department
         self.CourseType = CourseType
         self.CourseNum = CourseNum
