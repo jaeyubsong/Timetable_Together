@@ -11,6 +11,11 @@ import SQLite
 
 class SecondViewController: UIViewController {
     
+    @IBOutlet weak var viewPage: UIView!
+    
+    let screenWidth = UIScreen.main.bounds.width
+    let screenHeight = UIScreen.main.bounds.height
+    
     var databaseUser: Connection!
     
     let usersTable = Table("userTimeTable")
@@ -63,6 +68,19 @@ class SecondViewController: UIViewController {
             } else {
                 print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*1000).rounded() / 1000)
             }
+        }
+        
+        //Draw graph if there are any grades
+        if (endSem-startSem > 0) {
+            var totalAverage = averageArray(startSem, endSem, "total")
+            for i in 0...totalAverage.count-1 {
+                print(Int2Sem(startSem+i),"has average of: ",totalAverage[i])
+            }
+            let viewPageHeight = Int(viewPage.frame.size.height)
+            
+            drawSquare(30, 0, 15, 540, UIColor.blue)
+            print("Screen size is: ",viewPageHeight)
+            drawGraph(topX: 30, topY: 20, bottomX: Int(screenWidth)-60, bottomY: viewPageHeight/2-20, minSem: startSem, maxSem: endSem, grades: totalAverage)
         }
         
         
@@ -202,6 +220,67 @@ class SecondViewController: UIViewController {
             return String(intSemester / 2) + "S"
         } else {
             return String(intSemester / 2) + "F"
+        }
+    }
+    
+    func drawSquare(_ topX: Int, _ topY: Int, _ bottomX: Int, _ bottomY: Int, _ color: UIColor) {
+        let squarePath = UIBezierPath() /// 1
+        squarePath.move(to: CGPoint(x: topX, y: topY))
+        squarePath.addLine(to: CGPoint(x: bottomX, y: topY))
+        squarePath.addLine(to: CGPoint(x: bottomX, y: bottomY))
+        squarePath.addLine(to: CGPoint(x: topX, y: bottomY))
+        squarePath.close()
+        
+        let square = CAShapeLayer() /// 6
+        square.path = squarePath.cgPath /// 7
+        square.fillColor = color.cgColor
+        viewPage.layer.addSublayer(square)
+    }
+    
+    func averageArray(_ startSem: Int, _ endSem: Int, _ gradeType: String) -> [Double] {
+        var averageArray = [Double]()
+        if (gradeType == "total") {
+            for i in startSem...endSem {
+                var currentSem = DBSemesterTotalGrade(Semester: Int2Sem(i))[0]
+                if (currentSem.count == 0) {
+                    print (Int2Sem(i), "has no grades")
+                    averageArray.append(0.0)
+                } else {
+                    print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*1000).rounded() / 1000)
+                    averageArray.append( (getAverage(Array: currentSem)*1000).rounded() / 1000 )
+                }
+            }
+        } else if (gradeType == "major") {
+            for i in startSem...endSem {
+                var currentSem = DBSemesterTotalGrade(Semester: Int2Sem(i))[1]
+                if (currentSem.count == 0) {
+                    print (Int2Sem(i), "has no grades")
+                    averageArray.append(0.0)
+                } else {
+                    print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*1000).rounded() / 1000)
+                    averageArray.append( (getAverage(Array: currentSem)*1000).rounded() / 1000 )
+                }
+            }
+        } else {
+            return [0.0]
+        }
+        return averageArray
+    }
+    
+    func validSemNums(gradeArray: [Double]) -> Int {
+        var validSemester: Int = 0
+        for i in 0...gradeArray.count-1 {
+            if gradeArray[i] != 0.0 {
+                validSemester += 0
+            }
+        }
+        return validSemester
+    }
+    
+    func drawGraph(topX: Int, topY: Int, bottomX: Int, bottomY: Int, minSem: Int, maxSem: Int, grades: [Double]) {
+        valid
+        for i in 0...maxSem-minSem {
+            drawSquare
         }
     }
     
