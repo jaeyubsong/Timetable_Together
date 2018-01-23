@@ -8,6 +8,6 @@
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:../../../Downloads/SQLite.swift-master/SQLite.xcodeproj">
+      location = "group:SQLite.swift-master/SQLite.xcodeproj">
    </FileRef>
 </Workspace>
