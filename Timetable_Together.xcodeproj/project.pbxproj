@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		762B0C69E312DE17DF5951BF /* Pods_Timetable_Together.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD216563FE912EFF309722CB /* Pods_Timetable_Together.framework */; };
+		96613632201670010047215C /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96613633201670010047215C /* SQLite.framework */; };
+		966136342016700C0047215C /* SQLite.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96613633201670010047215C /* SQLite.framework */; };
+		966136352016700C0047215C /* SQLite.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 96613633201670010047215C /* SQLite.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		966ED8DA2013656700B50A60 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966ED8D92013656700B50A60 /* AppDelegate.swift */; };
 		966ED8DC2013656700B50A60 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966ED8DB2013656700B50A60 /* FirstViewController.swift */; };
 		966ED8DE2013656700B50A60 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966ED8DD2013656700B50A60 /* SecondViewController.swift */; };
@@ -21,8 +24,23 @@
 		CEA2AFFD2015FDAC00255830 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA2AFFC2015FDAC00255830 /* ThirdViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		966136362016700C0047215C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				966136352016700C0047215C /* SQLite.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		6F2CA433B1098DF4C6C8C68F /* Pods-Timetable_Together.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timetable_Together.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Timetable_Together/Pods-Timetable_Together.debug.xcconfig"; sourceTree = "<group>"; };
+		96613633201670010047215C /* SQLite.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SQLite.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		966ED8D62013656700B50A60 /* Timetable_Together.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timetable_Together.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		966ED8D92013656700B50A60 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		966ED8DB2013656700B50A60 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -45,7 +63,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96613632201670010047215C /* SQLite.framework in Frameworks */,
 				762B0C69E312DE17DF5951BF /* Pods_Timetable_Together.framework in Frameworks */,
+				966136342016700C0047215C /* SQLite.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +121,7 @@
 		F06018CF5681ADEB8705A88C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				96613633201670010047215C /* SQLite.framework */,
 				DD216563FE912EFF309722CB /* Pods_Timetable_Together.framework */,
 			);
 			name = Frameworks;
@@ -119,6 +140,7 @@
 				966ED8D42013656700B50A60 /* Resources */,
 				233C98893D5A0422310A5638 /* [CP] Embed Pods Frameworks */,
 				56214436BC4D220CF807CCFB /* [CP] Copy Pods Resources */,
+				966136362016700C0047215C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -387,10 +409,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9J7GDK2JXD;
+				DEVELOPMENT_TEAM = 249Q6H529D;
 				INFOPLIST_FILE = Timetable_Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = kaist.bogo.anything;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jaeyub.TimeTableApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -406,10 +428,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 9J7GDK2JXD;
+				DEVELOPMENT_TEAM = 249Q6H529D;
 				INFOPLIST_FILE = Timetable_Together/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = kaist.bogo.anything;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jaeyub.TimeTableApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;

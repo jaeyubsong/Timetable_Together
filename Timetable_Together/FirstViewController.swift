@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-import SQLite3
+import SQLite
 
 class FirstViewController: UIViewController{
 
@@ -54,6 +54,10 @@ class FirstViewController: UIViewController{
             (action: UIAlertAction!) in print("Do Delete: " + String(button.tag))
         }))
         self.present(alert,animated: true,completion: nil)
+        print(button.frame.minX)
+        print(button.frame.minY)
+        print(button.frame.maxX)
+        print(button.frame.maxY)
     }
     
     let days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
@@ -73,30 +77,50 @@ class FirstViewController: UIViewController{
     let dayHeight = 45
     
     
-    var db: OpaquePointer?
+    var databaseUser: Connection!
+    
+    let usersTable = Table("userTimeTable")
+    let id = Expression<Int>("id")
+    let Department = Expression<String>("Department")
+    let CourseType = Expression<String>("CourseType")
+    let CourseNum = Expression<String>("CourseNum")
+    let Section = Expression<String>("Section")
+    let CourseTitle = Expression<String>("CourseTitle")
+    let AU = Expression<String>("AU")
+    let Credit = Expression<String>("Credit")
+    let Instructor = Expression<String>("Instructor")
+    let ClassTime = Expression<String>("ClassTime")
+    let Classroom = Expression<String>("Classroom")
+    let Semester = Expression<String>("Semester")
+    let Grade = Expression<String>("Grade")
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ///database file
-        let fileUrl = try!
-            FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("semesterDatabase.sqlite")
-        ///opening the database
-        if sqlite3_open(fileUrl.path, &db) != SQLITE_OK{
-            print("Error opening database")
-            return
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrlUser = documentDirectory.appendingPathComponent("userTimeTable").appendingPathExtension("sqlite3")
+            let databaseUser = try Connection(fileUrlUser.path)
+            self.databaseUser = databaseUser
+        } catch {
+            print (error)
         }
 
-        ///creating table
-        let createTableQuery = "CREATE TABLE IF NOT EXISTS semester(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, powerrank INTEGER)"
-        if sqlite3_exec(db, createTableQuery, nil, nil, nil) != SQLITE_OK{
-            print ("error creating table")
-            return
-
-        }
-
-        print("Everything is fine")
+        createUserTable()
         
+        // 중복과목은 CourseNum을 통해서 같은 항목 추가 안함
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
+        
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS311", Section: "", CourseTitle: "전산기조직", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS320", Section: "", CourseTitle: "프로그래밍언어", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
+        DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
+        
+        DBdeleteClass(CourseNum: "CS204")
+        DBdeleteAllClass()
+        DBlistClasses()
         
         
         let startTime = 8
@@ -108,6 +132,7 @@ class FirstViewController: UIViewController{
         addClass(12, 13, 3, "다른과목", startTime, dayColors)
         addClass(13, 14, 2, "과목2", startTime, dayColors)
         addClass(16, 18, 4, "체육과목", startTime, dayColors)
+        removeClass(startTime: 13, tableStart: startTime, day: 2)
         searchPage.addSubview(searchBar)
         searchPicker.delegate = self
         searchPicker.dataSource = self
@@ -123,6 +148,89 @@ class FirstViewController: UIViewController{
     func action(sender:UIButton!) {
         print("Button Clicked")
     }
+    
+    func createUserTable() {
+        let createTable = self.usersTable.create { (table) in
+            table.column(self.id, primaryKey: true)
+            table.column(self.Department)
+            table.column(self.CourseType)
+            table.column(self.CourseNum, unique: true)
+            table.column(self.Section)
+            table.column(self.CourseTitle)
+            table.column(self.AU)
+            table.column(self.Credit)
+            table.column(self.Instructor)
+            table.column(self.ClassTime)
+            table.column(self.Classroom)
+            table.column(self.Semester)
+            table.column(self.Grade)
+        }
+        
+        do {
+            try self.databaseUser.run(createTable)
+            print("Created Table")
+        } catch {
+            print(error)
+        }
+    }
+    
+    func DBinsertClass(Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: String, Classroom: String, Semester: String, Grade: String) {
+        let insertClass = self.usersTable.insert(self.Department <- Department,
+                                                self.CourseType <- CourseType,
+                                                self.CourseNum <- CourseNum,
+                                                self.Section <- Section,
+                                                self.CourseTitle <- CourseTitle,
+                                                self.AU <- AU,
+                                                self.Credit <- Credit,
+                                                self.Instructor <- Instructor,
+                                                self.ClassTime <- ClassTime,
+                                                self.Classroom <- Classroom,
+                                                self.Semester <- Semester,
+                                                self.Grade <- Grade)
+        do {
+            try self.databaseUser.run(insertClass)
+            print("Inserted User")
+        } catch {
+            print(error)
+        }
+    }
+    
+    func DBupdateGrade(CourseNum: String, Grade: String) {
+        let userClass = self.usersTable.filter(self.CourseNum == CourseNum)
+        let updateClass = userClass.update(self.Grade <- Grade)
+        do {
+            try self.databaseUser.run(updateClass)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func DBdeleteClass(CourseNum: String) {
+        let userClass = self.usersTable.filter(self.CourseNum == CourseNum)
+        let deleteClass = userClass.delete()
+        do {
+            try self.databaseUser.run(deleteClass)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func DBdeleteAllClass() {
+        
+    }
+    
+    
+    func DBlistClasses() {
+        do {
+            let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                print("userId: \(user[self.id]), Department: \(user[self.Department]), CourseType: \(user[self.CourseType]), CourseNum: \(user[self.CourseNum]), Section: \(user[self.Section]), CourseTitle: \(user[self.CourseTitle]), AU: \(user[self.AU]), Credit: \(user[self.Credit]), Instructor: \(user[self.Instructor]), ClassTime: \(user[self.ClassTime]), Classroom: \(user[self.Classroom]), Semester: \(user[self.Semester]), Grade: \(user[self.Grade])")
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     
     func addLine(_ x: Int, _ y: Int, _ width: Int, _ height: Int, _ color: UIColor) {
         let leftLine = UIView(frame: CGRect(x: x, y: y, width: width, height: height))
@@ -222,6 +330,16 @@ class FirstViewController: UIViewController{
         
         scrollPage.addSubview(button)
 
+    }
+    
+    func removeClass(startTime: Double, tableStart: Int, day: Int) {
+        let xPosition = (timeWidth + Int(screenWidth - 30) * day / 5)
+        let yPosition = Int( (Double(dayHeight) + Double(timeHeight) * (startTime - Double(tableStart))) )
+        for button in scrollPage.subviews {
+            if( button.tag == pairing(xPosition, yPosition)) {
+                button.removeFromSuperview()
+            }
+        }
     }
     
 
