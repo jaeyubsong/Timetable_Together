@@ -28,6 +28,8 @@ class FirstViewController: UIViewController{
     let semesterType = ["봄", "가을"]
     let yearType = ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
     
+    
+    
     var filteredData = [Class]()
     
     //update to DB
