@@ -630,15 +630,12 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let add = UITableViewRowAction(style: .normal, title: "Add") { action, index in
             print("Add button tapped")
-            //push to local DB
-   
-            //addClass(<#T##ClassStart: Double##Double#>, <#T##ClassEnd: Double##Double#>, <#T##day: Int##Int#>, <#T##text: String##String#>)
             
             let times = self.filteredData[editActionsForRowAt.row].ClassTime.split(separator: "\n")
-            let text = self.filteredData[editActionsForRowAt.row].CourseTitle + "\n" + filteredData[editActionsForRowAt.row].Classroom
-            let userId = filteredData[editActionsForRowAt.row].
+            let text = self.filteredData[editActionsForRowAt.row].CourseTitle + "\n" + self.filteredData[editActionsForRowAt.row].Classroom
+            let userId = self.filteredData[editActionsForRowAt.row].userId
             
-            addClass(times, text, <#T##userId: Int##Int#>)
+            addClass(times, text, userId)
         }
         add.backgroundColor = .lightGray
         
