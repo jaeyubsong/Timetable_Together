@@ -119,6 +119,12 @@ class FirstViewController: UIViewController{
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS315", Section: "", CourseTitle: "이산 수학", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS320", Section: "", CourseTitle: "프로그래밍언어", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
             "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS390", Section: "", CourseTitle: "나이산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS366", Section: "", CourseTitle: "이산한산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS324", Section: "", CourseTitle: "가이산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
          DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS319", Section: "", CourseTitle: "중간에 이산 끝", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
         
@@ -235,13 +241,20 @@ class FirstViewController: UIViewController{
     }
     
     func DBfindClassByTitle(CourseTitlePart: String) -> [Class] {
-        var classes = [Class]()
+        var firstClass = [Class]()
+        var secondClass = [Class]()
+        //var classes = [Class]()
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 if (user[self.CourseTitle].contains(CourseTitlePart)) {
                     let oneClass = Class(Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
-                    classes.append(oneClass)
+                    // Check for equals substring in front
+                    if (user[self.CourseTitle].prefix(CourseTitlePart.count) == CourseTitlePart) {
+                        firstClass.append(oneClass)
+                    } else {
+                        secondClass.append(oneClass)
+                    }
                 }
             }
         } catch {
@@ -249,25 +262,81 @@ class FirstViewController: UIViewController{
         }
         //print(classes[1].CourseNum)
         //print(classes.count)
-        return classes
+        
+        return insertionSortTitle(firstClass) + insertionSortTitle(secondClass)
     }
     
     func DBfindClassByInstructor(InstructorPart: String) -> [Class] {
-        var classes = [Class]()
+        var firstClass = [Class]()
+        var secondClass = [Class]()
+        //var classes = [Class]()
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 if (user[self.Instructor].contains(InstructorPart)) {
                     let oneClass = Class(Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
-                    classes.append(oneClass)
+                    // Check for equals substring in front
+                    if (user[self.Instructor].prefix(InstructorPart.count) == InstructorPart) {
+                        firstClass.append(oneClass)
+                    } else {
+                        secondClass.append(oneClass)
+                    }
                 }
             }
         } catch {
             print (error)
         }
-        print(classes[0].CourseNum)
-        return classes
+        //print(classes[0].CourseNum)
+        return insertionSortInstructor(firstClass) + insertionSortInstructor(secondClass)
     }
+    
+//    func SortByTitle(classArray: [Class]) -> [Class]{
+//        var returnArray = deepCopy(targetClass: classArray)
+//        for i in (0...classArray.count-1).reversed() {
+//            for j in 1...i {
+//                if (returnArray[j].CourseTitle > returnArray[j-1].CourseTitle) {
+//                    var temp = returnArray[j-1]
+//                    returnArray[j-1] = returnArray[j]
+//                    returnArray[j] = temp
+//                }
+//            }
+//        }
+//        return classArray
+//    }
+    
+    func insertionSortTitle(_ classArray: [Class]) -> [Class] {
+        var a = classArray
+        if(a.count > 0) {
+            for x in 1..<a.count {
+                var y = x
+                let temp = a[y]
+                while y > 0 && temp.CourseTitle < a[y - 1].CourseTitle {
+                    a[y] = a[y - 1]                // 1
+                    y -= 1
+                }
+                a[y] = temp                      // 2
+            }
+        }
+        return a
+    }
+    
+    func insertionSortInstructor(_ classArray: [Class]) -> [Class] {
+        var a = classArray
+        if(a.count > 0) {
+            for x in 1..<a.count {
+                var y = x
+                let temp = a[y]
+                while y > 0 && temp.Instructor < a[y - 1].Instructor {
+                    a[y] = a[y - 1]                // 1
+                    y -= 1
+                }
+                a[y] = temp                      // 2
+            }
+        }
+        return a
+    }
+    
+    
     
     func DBlistClasses() {
         do {
@@ -559,6 +628,33 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
+    
+    
+    func moveElementIn(newElement: Class, Index: Int, classArray: [Class]) -> [Class] {
+        var returnArray = [Class]()
+        // Move last element
+        
+        for i in (Index...classArray.count-1).reversed() {
+            returnArray.insert(classArray[i], at: 0)
+        }
+        
+        returnArray.insert(newElement, at: 0)
+        
+        for n in (0...Index-1).reversed() {
+            returnArray.insert(classArray[n], at: 0)
+        }
+        
+        return returnArray
+    }
+    
+    func deepCopy(targetClass: [Class]) -> [Class] {
+        var returnArray = [Class]()
+        for i in (0...targetClass.count-1).reversed() {
+            returnArray.append(targetClass[i])
+        }
+        return returnArray
+    }
+    
 
 }
 
