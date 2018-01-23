@@ -288,7 +288,6 @@ class FirstViewController: UIViewController{
         }
 
         return insertionSortTitle(firstClass)+insertionSortTitle(secondClass)
-
     }
     
     func DBfindClassByInstructor(InstructorPart: String) -> [Class] {
@@ -299,7 +298,7 @@ class FirstViewController: UIViewController{
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 if (user[self.Instructor].contains(InstructorPart)) {
-
+                    
                     let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
                     // Check for equals substring in front
                     if (user[self.Instructor].prefix(InstructorPart.count) == InstructorPart) {
@@ -444,7 +443,7 @@ class FirstViewController: UIViewController{
         
     }
     
-    func time2Double(_ time: String) -> Double {
+    func time2Double(_ time: Substring) -> Double {
         let h = Double(time.split(separator: ":")[0])
         let m = time.split(separator: ":")[1]
         if(m=="00"){
@@ -453,8 +452,23 @@ class FirstViewController: UIViewController{
             return Double(h!+0.5)
         }
     }
+    
+    func day2Int(_ day:Substring) -> Int {
+        if day == "월" {
+            return 0
+        }else if day == "화" {
+            return 1
+        }else if day == "수" {
+            return 2
+        }else if day == "목" {
+            return 3
+        }else if day == "금" {
+            return 4
+        }
+        return -1
+    }
 
-    func addClass(_ time: [String], _ text: String, _ userId: Int) {
+    func addClass(_ time: [Substring], _ text: String, _ userId: Int) {
         let screenWidth = UIScreen.main.bounds.width
         let color = dayColors[Int(arc4random_uniform(7))]
         let fontName = "Times New Roman"
@@ -463,7 +477,8 @@ class FirstViewController: UIViewController{
         for i in 0...time.count-1{
             
             let button = UIButton(type: UIButtonType.custom) as UIButton
-            let day = time[i].split(separator: " ")[0]
+            let dayString = time[i].split(separator: " ")[0]
+            let day = day2Int(dayString)
             let devide = time[i].split(separator: " ")[1].split(separator: "~")
             let ClassStart = time2Double(devide[0])
             let ClassEnd = time2Double(devide[1])
@@ -638,7 +653,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
             let text = self.filteredData[editActionsForRowAt.row].CourseTitle + "\n" + self.filteredData[editActionsForRowAt.row].Classroom
             let userId = self.filteredData[editActionsForRowAt.row].userId
             
-            addClass(times, text, userId)
+            self.addClass(times, text, userId)
         }
         add.backgroundColor = .lightGray
         
