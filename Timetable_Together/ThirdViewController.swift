@@ -1,10 +1,10 @@
-//
-//  ThirdViewController.swift
-//  Timetable_Together
-//
-//  Created by USER on 2018. 1. 22..
-//  Copyright © 2018년 Jae Yub Song. All rights reserved.
-//
+///
+///  ThirdViewController.swift
+///  Timetable_Together
+///
+///  Created by USER on 2018. 1. 22..
+///  Copyright © 2018년 Jae Yub Song. All rights reserved.
+///
 
 import UIKit
 
@@ -14,6 +14,23 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var myGroup: UITableView!
     @IBOutlet weak var allGroup: UITableView!
     @IBOutlet weak var NaviBar: UINavigationBar!
+
+    @IBAction func addGroup(_ sender: Any) {
+        
+        let alert = UIAlertController(title: "그룹 등록", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "그룹명"
+        }
+        alert.addAction(UIAlertAction(title: "참여", style: .default, handler: { [weak alert] (_) in
+            let textField = alert?.textFields![0]
+            // 서버 그룹 리스트에 추가. 유저 참여 그룹 리스트에 추가
+            self.values.append(textField!.text!)
+            self.choiced.append(textField!.text!)
+            self.allGroup.reloadData()
+            self.myGroup.reloadData()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
     
     //sever에서 불러오기
     var values = ["hurricane", "sparcs", "k-bird", "창작동화", "둘리", "오케스트라"]
@@ -24,7 +41,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        /// Do any additional setup after loading the view, typically from a nib.
         
         allGroup.dataSource = self
         allGroup.delegate = self
@@ -36,8 +53,8 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         myGroup.register(UITableViewCell.self, forCellReuseIdentifier: "mycell")
         
         NaviBar.topItem?.title = "My Group List"
-        NaviBar.backgroundColor = UIColor(red: 0, green: 0.7333, blue: 0.8, alpha: 1.0) /* #00bbcc */
-        SearchBarList.barTintColor = UIColor(red: 0, green: 0.7569, blue: 0.8588, alpha: 1.0) /* #00c1db */
+        NaviBar.backgroundColor = UIColor(red: 0, green: 0.7333, blue: 0.8, alpha: 1.0) ///* #00bbcc */
+        SearchBarList.barTintColor = UIColor(red: 0, green: 0.7569, blue: 0.8588, alpha: 1.0) ///* #00c1db */
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,7 +114,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 }
@@ -109,8 +125,8 @@ extension ThirdViewController : UISearchBarDelegate {
         allGroup.isHidden = false
         myGroup.isHidden = true
         NaviBar.topItem?.title = "All Group List"
-        NaviBar.backgroundColor = UIColor(red: 0.8471, green: 0.749, blue: 0, alpha: 1.0) /* #d8bf00 */
-        SearchBarList.barTintColor = UIColor(red: 0.949, green: 0.8431, blue: 0.0627, alpha: 1.0) /* #f2d710 */
+        NaviBar.backgroundColor = UIColor(red: 0.8471, green: 0.749, blue: 0, alpha: 1.0) ///* #d8bf00 */
+        SearchBarList.barTintColor = UIColor(red: 0.949, green: 0.8431, blue: 0.0627, alpha: 1.0) ///* #f2d710 */
         self.SearchBarList.showsCancelButton = true
         
     }
@@ -123,7 +139,7 @@ extension ThirdViewController : UISearchBarDelegate {
         myGroup.isHidden = false
         NaviBar.topItem?.title = "My Group List"
         NaviBar.backgroundColor = UIColor(red: 0, green: 0.7333, blue: 0.8, alpha: 1.0)
-        SearchBarList.barTintColor = UIColor(red: 0, green: 0.7569, blue: 0.8588, alpha: 1.0) /* #00c1db */
+        SearchBarList.barTintColor = UIColor(red: 0, green: 0.7569, blue: 0.8588, alpha: 1.0) ///* #00c1db */
         myGroup.reloadData()
     }
     

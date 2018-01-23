@@ -252,7 +252,7 @@
             </objects>
             <point key="canvasLocation" x="2102" y="533"/>
         </scene>
-        <!--Group-->
+        <!--Third-->
         <scene sceneID="PxN-8j-NaK">
             <objects>
                 <viewController id="ce3-4k-bVT" customClass="ThirdViewController" customModule="Timetable_Together" customModuleProvider="target" sceneMemberID="viewController">
@@ -264,7 +264,13 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
-                                    <navigationItem title="소속 관리" id="1gd-tp-TUU"/>
+                                    <navigationItem title="소속 관리" id="1gd-tp-TUU">
+                                        <barButtonItem key="rightBarButtonItem" title="Item" image="ic_add_circle_outline" id="Bpj-GD-23w">
+                                            <connections>
+                                                <action selector="addGroup:" destination="ce3-4k-bVT" id="Isv-Cv-vIS"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                                 <connections>
                                     <outlet property="delegate" destination="ce3-4k-bVT" id="bjq-Ha-uab"/>
@@ -300,15 +306,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="QAE-Ny-KUa"/>
                     </view>
-
-                    <tabBarItem key="tabBarItem" title="Third" id="saO-K7-pTx"/>
+                    <tabBarItem key="tabBarItem" title="Third" image="ic_group" id="saO-K7-pTx"/>
                     <connections>
                         <outlet property="NaviBar" destination="guf-Pl-nWB" id="0La-m4-wPt"/>
                         <outlet property="SearchBarList" destination="EGb-1e-3wz" id="lNF-S3-Iww"/>
                         <outlet property="allGroup" destination="NWY-3N-E2h" id="Uex-BU-QqE"/>
                         <outlet property="myGroup" destination="6u5-yW-8Sp" id="MJn-lo-hGI"/>
                     </connections>
-
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NHy-KE-QWh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
