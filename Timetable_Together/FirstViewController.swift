@@ -27,7 +27,8 @@ class FirstViewController: UIViewController{
     let semesterType = ["봄", "가을"]
     let yearType = ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
 
-    ///save to DB
+    //update to DB
+    ///end of the semester
     @IBAction func saveButton(_ sender: Any) {
         
     }
@@ -54,9 +55,6 @@ class FirstViewController: UIViewController{
         }))
         self.present(alert,animated: true,completion: nil)
     }
-    
-    /// Tag numbers
-    /// Background Line: 20
     
     let days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
     let dayColors = [UIColor(red: 0.918, green: 0.224, blue: 0.153, alpha: 1),
@@ -192,7 +190,6 @@ class FirstViewController: UIViewController{
         button.setTitle(text, for: UIControlState.normal)
         button.titleLabel?.font = UIFont(name:"Times New Roman", size: 10)
 
-        button.addTarget(self, action: Selector(("onClick:forEvent:")), for: UIControlEvents.touchUpInside)
         button.tag = pairing(x, y)
         scrollPage.addSubview(button)
         
@@ -308,6 +305,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, editActionsForRowAt: IndexPath) -> [UITableViewRowAction]? {
         let add = UITableViewRowAction(style: .normal, title: "Add") { action, index in
             print("Add button tapped")
+            //push to local DB
             //addButton(<#T##x: Int##Int#>, <#T##y: Int##Int#>, <#T##width: Int##Int#>, <#T##height: Int##Int#>, <#T##text: String##String#>)
         }
         add.backgroundColor = .lightGray
