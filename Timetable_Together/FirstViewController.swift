@@ -224,8 +224,12 @@ class FirstViewController: UIViewController{
         }
     }
     
-    func DBdeleteAllClass() {
-        
+    func DBdeleteAllClass(Semester: String) {
+        do {
+            let users = try self.databaseUser.prepare(self.usersTable)
+        } catch {
+            
+        }
     }
     
     func DBfindClassByTitle(CourseTitlePart: String) -> [Class] {
