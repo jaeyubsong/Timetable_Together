@@ -258,7 +258,13 @@ class FirstViewController: UIViewController{
     func DBdeleteAllClass(Semester: String) {
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                if (user[self.Semester] == Semester) {
+                    DBdeleteClass(CourseTitle: user[self.CourseTitle])
+                }
+            }
         } catch {
+            print(error)
         }
     }
     
@@ -282,9 +288,8 @@ class FirstViewController: UIViewController{
         } catch {
             print (error)
         }
-        
+
         return insertionSortTitle(firstClass)+insertionSortTitle(secondClass)
-        
     }
     
     func DBfindClassByInstructor(InstructorPart: String) -> [Class] {
