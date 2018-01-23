@@ -161,11 +161,11 @@ class FirstViewController: UIViewController{
         
         
         CreateTimeTable(startTime: startTime, endTime: endTime)
-        addClass(14, 15.5, 0, "데이타구조")
-        addClass(12, 13, 2, "운영체제")
-        addClass(12, 13, 3, "다른과목")
-        addClass(13, 14, 2, "과목2")
-        addClass(16, 18, 4, "체육과목")
+//        addClass(14, 15.5, 0, "데이타구조")
+//        addClass(12, 13, 2, "운영체제")
+//        addClass(12, 13, 3, "다른과목")
+//        addClass(13, 14, 2, "과목2")
+//        addClass(16, 18, 4, "체육과목")
         
         searchPage.addSubview(searchBar)
         
@@ -257,7 +257,6 @@ class FirstViewController: UIViewController{
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
         } catch {
-            
         }
     }
     
