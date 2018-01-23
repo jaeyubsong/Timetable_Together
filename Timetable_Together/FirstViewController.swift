@@ -27,8 +27,10 @@ class FirstViewController: UIViewController{
     let searchType = ["과목명", "교수님"]
     let semesterType = ["봄", "가을"]
     let yearType = ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
-    var filteredData = [[String]]()
-
+    
+    var filteredData = [Class]()
+    //var searchTypeBool = true ///true: 과목명 false: 교수님
+    
     //update to DB
     ///end of the semester
     @IBAction func saveButton(_ sender: Any) {
@@ -330,7 +332,7 @@ class FirstViewController: UIViewController{
         button.layer.borderWidth = 1
         button.layer.borderColor = color.cgColor
     
-        button.tag = pairing(Int(xPosition), Int(yPosition))
+        button.tag = 10
         button.addTarget(self, action: #selector(pressButton(_:)), for: .touchUpInside)
         
         scrollPage.addSubview(button)
@@ -416,22 +418,27 @@ extension FirstViewController: UIPickerViewDataSource,UIPickerViewDelegate{
 
 extension FirstViewController: UISearchBarDelegate {
 
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//
-//        if (searchBar.text == nil || searchBar.text == ""){
-//
-//            isSearching = false
-//            view.endEditing(true)
-//            subjectView.reloadData()
-//
-//        }else{
-//
-//            isSearching = true
-//            //filteredData = data.filter({$0 == searchBar.text})
-//            subjectView.reloadData()
-//
-//        }
-//    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+
+        if (searchBar.text == nil || searchBar.text == ""){
+
+            isSearching = false
+            view.endEditing(true)
+            subjectView.reloadData()
+
+        }else if searchType[searchPicker.selectedRow(inComponent: 0)] == "과목명" {
+            print("과목명")
+            isSearching = true
+            //filteredData = data.filter({$0 == searchBar.text})
+            subjectView.reloadData()
+
+        }else{
+            print("교수님")
+            isSearching = true
+            //filteredData = data.filter({$0 == searchBar.text})
+            subjectView.reloadData()
+        }
+    }
     
 }
 
@@ -449,6 +456,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
         
         if isSearching {
             //text = filteredData[indexPath]["CourseTitle"] + "\n" + filteredData[indexPath]
+            
         }
         return cell
     }
