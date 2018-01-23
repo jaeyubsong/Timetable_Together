@@ -21,7 +21,7 @@ class FirstViewController: UIViewController{
     @IBOutlet weak var year: UIPickerView!
     @IBOutlet weak var semester: UIPickerView!
     
-    var timer = Timer.self
+    var scheduleChange = false
     var clickPlus = false
     var isSearching = false
     let searchType = ["과목명", "교수님"]
@@ -32,6 +32,36 @@ class FirstViewController: UIViewController{
     
     var filteredData = [Class]()
     
+    @IBAction func setting(_ sender: Any) {
+        let alert = UIAlertController(title: "시간표", message: "시작 시간과 끝시간을 적어주세요", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "시작시간 ex)오전 8시 => 8 입력"
+        }
+        alert.addTextField { (textField) in
+            textField.placeholder = "끝시간 ex)오후 8시 => 20 입력"
+        }
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+            var textField = alert?.textFields![0]
+            if textField?.text != nil{
+                let temp = Int(textField!.text!)!
+                textField = alert!.textFields![1]
+                if textField?.text != nil{
+                    self.startTime = temp
+                    self.endTime = Int(textField!.text!)!
+                    if(self.endTime > self.startTime){
+                        for view in self.scrollPage.subviews{
+                            view.removeFromSuperview()
+                        }
+                        self.viewDidLoad()
+                    }else {
+                        Error.self
+                    }
+                    
+                }
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
     ///end of the semester
     @IBAction func saveButton(_ sender: Any) {
         let alert = UIAlertController(title: "학기를 마치며", message: "성적을 숫자로 입력해 주세요", preferredStyle: UIAlertControllerStyle.alert)
@@ -49,7 +79,7 @@ class FirstViewController: UIViewController{
         }
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
             for index in 0...((alert?.textFields!.count)!-1){
-                let textField = alert?.textFields![index] // Force unwrapping because we know it exists.
+                let textField = alert?.textFields![index]
                 self.DBupdateGrade(CourseNum: subjectOrder[index], Grade: (textField?.text!)!)
             }
             
@@ -71,6 +101,7 @@ class FirstViewController: UIViewController{
     }
     ///subjectButton
     @objc func pressButton(_ button: UIButton) {
+        //같이 듣는 사람들 목록(서버연동)
         let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
@@ -135,7 +166,7 @@ class FirstViewController: UIViewController{
 
         createUserTable()
         
-        // 중복과목은 CourseNum을 통해서 같은 항목 추가 안함
+        /// 중복과목은 CourseNum을 통해서 같은 항목 추가 안함
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS316", Section: "", CourseTitle: "이산 아무거나", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
@@ -152,9 +183,7 @@ class FirstViewController: UIViewController{
          DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS319", Section: "", CourseTitle: "중간에 이산 끝", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
         
-        DBfindClassByTitle(CourseTitlePart: "전산")
-        DBfindClassByInstructor(InstructorPart: "석영")
-        // DBdeleteAllClass()
+        /// DBdeleteAllClass()
         DBlistClasses()
         
         CreateTimeTable(startTime: startTime, endTime: endTime)
@@ -173,7 +202,8 @@ class FirstViewController: UIViewController{
         
         year.selectRow(6, inComponent: 0, animated: true)
         semester.selectRow(0, inComponent: 0, animated: true)
-        //DB 불러오기
+        
+        //처음 시작하면 DB 불러오기 (클래스 + 학기)
         
     }
     
@@ -266,11 +296,11 @@ class FirstViewController: UIViewController{
         var firstClass = [Class]()
         var secondClass = [Class]()
         do {
+            //모든 과목 다들어있는 디비에서 찾기
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 if (user[self.CourseTitle].contains(CourseTitlePart)) {
                     let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
-                    // Check for equals substring in front
                     if (user[self.CourseTitle].prefix(CourseTitlePart.count) == CourseTitlePart) {
                         firstClass.append(oneClass)
                     } else {
@@ -289,12 +319,11 @@ class FirstViewController: UIViewController{
         var firstClass = [Class]()
         var secondClass = [Class]()
         do {
+            //모든 과목 다들어있는 디비에서 찾기
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 if (user[self.Instructor].contains(InstructorPart)) {
-                    
                     let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
-                    // Check for equals substring in front
                     if (user[self.Instructor].prefix(InstructorPart.count) == InstructorPart) {
                         firstClass.append(oneClass)
                     } else {
@@ -316,10 +345,10 @@ class FirstViewController: UIViewController{
                 var y = x
                 let temp = a[y]
                 while y > 0 && temp.CourseTitle < a[y - 1].CourseTitle {
-                    a[y] = a[y - 1]                // 1
+                    a[y] = a[y - 1]                /// 1
                     y -= 1
                 }
-                a[y] = temp                      // 2
+                a[y] = temp                      /// 2
             }
         }
         return a
@@ -332,10 +361,10 @@ class FirstViewController: UIViewController{
                 var y = x
                 let temp = a[y]
                 while y > 0 && temp.Instructor < a[y - 1].Instructor {
-                    a[y] = a[y - 1]                // 1
+                    a[y] = a[y - 1]                /// 1
                     y -= 1
                 }
-                a[y] = temp                      // 2
+                a[y] = temp                      /// 2
             }
         }
         return a
@@ -556,13 +585,21 @@ extension FirstViewController: UIPickerViewDataSource,UIPickerViewDelegate{
             pickerView.backgroundColor = UIColor(red: 0.6667, green: 0.8, blue: 0, alpha: 1.0)
         }else if ( pickerView.tag == 2 ){
             pickerLabel?.text = yearType[row]
+            scheduleChange = true
         }else{
             pickerLabel?.text = semesterType[row]
+            scheduleChange = true
+        }
+        
+        if scheduleChange {
+            //DB 에서 해당되는 시간표 불러오기
         }
         
         
         return pickerLabel!
     }
+    
+
 }
 
 extension FirstViewController: UISearchBarDelegate {
@@ -661,7 +698,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
     
     func moveElementIn(newElement: Class, Index: Int, classArray: [Class]) -> [Class] {
         var returnArray = [Class]()
-        // Move last element
+        /// Move last element
         
         for i in (Index...classArray.count-1).reversed() {
             returnArray.insert(classArray[i], at: 0)

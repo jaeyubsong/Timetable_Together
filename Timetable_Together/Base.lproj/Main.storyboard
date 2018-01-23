@@ -145,7 +145,11 @@
                                             </connections>
                                         </barButtonItem>
                                         <rightBarButtonItems>
-                                            <barButtonItem style="plain" systemItem="compose" id="BHK-hK-z8w"/>
+                                            <barButtonItem image="ic_settings" style="plain" id="BHK-hK-z8w">
+                                                <connections>
+                                                    <action selector="setting:" destination="9pv-A4-QxB" id="aCt-NI-DWN"/>
+                                                </connections>
+                                            </barButtonItem>
                                             <barButtonItem image="ic_add_circle_outline" style="plain" id="TAs-Jp-Z3l">
                                                 <connections>
                                                     <action selector="search:" destination="9pv-A4-QxB" id="KxN-9w-cGd"/>
@@ -581,6 +585,7 @@
         <image name="ic_equalizer" width="24" height="24"/>
         <image name="ic_group" width="24" height="24"/>
         <image name="ic_save" width="24" height="24"/>
+        <image name="ic_settings" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="jhn-FM-0rV"/>
