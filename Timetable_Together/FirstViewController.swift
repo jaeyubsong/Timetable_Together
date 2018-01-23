@@ -23,9 +23,11 @@ class FirstViewController: UIViewController{
     
     
     var clickPlus = false
+    var isSearching = false
     let searchType = ["과목명", "교수님"]
     let semesterType = ["봄", "가을"]
     let yearType = ["2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"]
+    var filteredData = [[String]]()
 
     //update to DB
     ///end of the semester
@@ -51,13 +53,11 @@ class FirstViewController: UIViewController{
         let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
-            (action: UIAlertAction!) in print("Do Delete: " + String(button.tag))
+            (action: UIAlertAction!) in
+            //button delete
+            print("Do Delete: " + String(button.tag))
         }))
         self.present(alert,animated: true,completion: nil)
-        print(button.frame.minX)
-        print(button.frame.minY)
-        print(button.frame.maxX)
-        print(button.frame.maxY)
     }
     
     let days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
@@ -133,11 +133,16 @@ class FirstViewController: UIViewController{
         addClass(13, 14, 2, "과목2", startTime, dayColors)
         addClass(16, 18, 4, "체육과목", startTime, dayColors)
         removeClass(startTime: 13, tableStart: startTime, day: 2)
+        
         searchPage.addSubview(searchBar)
+        
         searchPicker.delegate = self
         searchPicker.dataSource = self
+        
         searchBar.barTintColor = UIColor(red: 0.6667, green: 0.8, blue: 0, alpha: 1.0)
-
+        searchBar.returnKeyType = UIReturnKeyType.done
+        
+        
         searchPicker.tag = 1
         year.tag = 2
         semester.tag = 3
@@ -409,14 +414,42 @@ extension FirstViewController: UIPickerViewDataSource,UIPickerViewDelegate{
     }
 }
 
+extension FirstViewController: UISearchBarDelegate {
+
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//
+//        if (searchBar.text == nil || searchBar.text == ""){
+//
+//            isSearching = false
+//            view.endEditing(true)
+//            subjectView.reloadData()
+//
+//        }else{
+//
+//            isSearching = true
+//            //filteredData = data.filter({$0 == searchBar.text})
+//            subjectView.reloadData()
+//
+//        }
+//    }
+    
+}
+
 extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if(isSearching){
+            return filteredData.count
+        }
         return 8
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "subjectList", for: indexPath)
+        
+        if isSearching {
+            text = filteredData[indexPath]["CourseTitle"] + "\n" + filteredData[indexPath]
+        }
         return cell
     }
     
@@ -424,6 +457,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
         let add = UITableViewRowAction(style: .normal, title: "Add") { action, index in
             print("Add button tapped")
             //push to local DB
+            
             //addButton(<#T##x: Int##Int#>, <#T##y: Int##Int#>, <#T##width: Int##Int#>, <#T##height: Int##Int#>, <#T##text: String##String#>)
         }
         add.backgroundColor = .lightGray
@@ -434,7 +468,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
+
 }
 
 
