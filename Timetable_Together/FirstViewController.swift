@@ -119,8 +119,10 @@ class FirstViewController: UIViewController{
         DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
         
         DBdeleteClass(CourseNum: "CS204")
-        DBdeleteAllClass()
-        DBlistClasses()
+        DBfindClassByTitle(CourseTitlePart: "전산")
+        DBfindClassByInstructor(InstructorPart: "석영")
+        // DBdeleteAllClass()
+        // DBlistClasses()
         
         
         let startTime = 8
@@ -224,6 +226,39 @@ class FirstViewController: UIViewController{
         
     }
     
+    func DBfindClassByTitle(CourseTitlePart: String) -> [Class] {
+        var classes = [Class]()
+        do {
+            let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                if (user[self.CourseTitle].contains(CourseTitlePart)) {
+                    var oneClass = Class(Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
+                    classes.append(oneClass)
+                }
+            }
+        } catch {
+            print (error)
+        }
+        print(classes[0].CourseNum)
+        return classes
+    }
+    
+    func DBfindClassByInstructor(InstructorPart: String) -> [Class] {
+        var classes = [Class]()
+        do {
+            let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                if (user[self.Instructor].contains(InstructorPart)) {
+                    var oneClass = Class(Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
+                    classes.append(oneClass)
+                }
+            }
+        } catch {
+            print (error)
+        }
+        print(classes[0].CourseNum)
+        return classes
+    }
     
     func DBlistClasses() {
         do {
