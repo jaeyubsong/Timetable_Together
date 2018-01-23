@@ -14,6 +14,7 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var userStudentidTextField: UITextField!
     @IBOutlet weak var userPasswordTextField: UITextField!
+    
     var servermessage : String = ""
     
     override func viewDidLoad() {
@@ -21,6 +22,8 @@ class LoginViewController: UIViewController {
         
         // Do any additional setup after loading the view.
     }
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -54,25 +57,7 @@ class LoginViewController: UIViewController {
     
     func response(serverresponse : String, userstudentid:String, userpassword:String){
         
-        if (serverresponse == "sucess") {
-            
-            // UserDefaults.standard.set(userstudentid, forKey: "userstudentid")
-            // UserDefaults.standard.set(userpassword, forKey: "userpassword")
-            
-            
-            let myAlert = UIAlertController(title: "Alert", message: "Login is sucessful", preferredStyle: UIAlertControllerStyle.alert)
-            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)  {    action in
-                self.performSegue(withIdentifier: "timetable", sender: self)
-            }
-            myAlert.addAction(okAction)
-            self.present(myAlert,animated: true,completion: nil)
-            
-            
-            
-            
-        }
-            
-        else if (serverresponse == "empty"){
+        if (serverresponse == "empty"){
             self.displayMyAlertMessage(userMessage: "cannot find any id");
             return;
         }
@@ -81,6 +66,40 @@ class LoginViewController: UIViewController {
             self.displayMyAlertMessage(userMessage: "Passwords do not match");
             return;
         }
+            
+            
+        else {
+            
+            UserDefaults.standard.set(userstudentid, forKey: "userstudentid")
+            UserDefaults.standard.set(userpassword, forKey: "userpassword")
+            UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
+            print(serverresponse)
+            
+            let url = "http://143.248.132.154:80/"
+            
+            Alamofire.request(url + serverresponse ).responseJSON { response in
+                switch response.result{
+                case .success(_):
+                    if let data = response.result.value{
+                        let json = JSON(data)
+                        print("123123")
+                        print(json)
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            /*
+             let myAlert = UIAlertController(title: "Alert", message: "Login is sucessful", preferredStyle: UIAlertControllerStyle.alert)
+             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)  {    action in
+             self.performSegue(withIdentifier: "totab", sender: self)
+             }
+             myAlert.addAction(okAction)
+             self.present(myAlert,animated: true,completion: nil)
+             */
+        }
+        
+        
         
     }
     
@@ -109,4 +128,5 @@ class LoginViewController: UIViewController {
  // Pass the selected object to the new view controller.
  }
  */
+
 
