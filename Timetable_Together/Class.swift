@@ -39,4 +39,6 @@ class Class {
         self.Grade = Grade
         self.Semester = Semester
     }
+    
+
 }
