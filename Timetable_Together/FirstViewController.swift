@@ -448,7 +448,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
         let cell = tableView.dequeueReusableCell(withIdentifier: "subjectList", for: indexPath)
         
         if isSearching {
-            text = filteredData[indexPath]["CourseTitle"] + "\n" + filteredData[indexPath]
+            //text = filteredData[indexPath]["CourseTitle"] + "\n" + filteredData[indexPath]
         }
         return cell
     }
