@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import SQLite
 
 class LoginViewController: UIViewController {
     
@@ -16,10 +17,39 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var userPasswordTextField: UITextField!
     
     var servermessage : String = ""
+    var databaseUser: Connection!
+    
+    let usersTable = Table("SubjectList")
+    
+    //let id = Expression<Int>("id")
+    let id = Expression<Int>("id")
+    let Department = Expression<String>("Department")
+    let CourseType = Expression<String>("CourseType")
+    let CourseNum = Expression<String>("CourseNum")
+    let Section = Expression<String>("Section")
+    let CourseTitle = Expression<String>("CourseTitle")
+    let AU = Expression<String>("AU")
+    let Credit = Expression<String>("Credit")
+    let Instructor = Expression<String>("Instructor")
+    let ClassTime = Expression<String>("ClassTime")
+    let Classroom = Expression<String>("Classroom")
+    //let Semester = Expression<String>("Semester")
+    //let Grade = Expression<String>("Grade")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrlUser = documentDirectory.appendingPathComponent("SubjectList").appendingPathExtension("sqlite3")
+            let databaseUser = try Connection(fileUrlUser.path)
+            self.databaseUser = databaseUser
+            print("created")
+        } catch {
+            print (error)
+        }
+        
+        createUserTable()
         // Do any additional setup after loading the view.
     }
     
@@ -40,7 +70,7 @@ class LoginViewController: UIViewController {
             "password" : userPassword!
         ]
         
-        let url = "http://143.248.132.154:80/"
+        let url = "http://143.248.140.251:5480/"
         
         Alamofire.request(url + "login", method:.post, parameters:userinformation,encoding: JSONEncoding.default).responseString { response in
             switch response.result {
@@ -75,9 +105,28 @@ class LoginViewController: UIViewController {
             UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
             print(serverresponse)
             
-            let url = "http://143.248.140.251:80/"
+            let url = "http://143.248.140.251:5480/"
             
             Alamofire.request(url + serverresponse ).responseJSON { response in
+                switch response.result{
+                case .success(_):
+                    if let data = response.result.value{
+              
+                        let json = JSON(data)
+                        for item in json{
+                            let b = item.1
+                            print(b[" CourseNum"])
+                            self.DBinsertClass(Department: b["Department"].stringValue, CourseType: b[" CourseType"].stringValue, CourseNum: b[" CourseNum"].stringValue, Section: b[" Section"].stringValue, CourseTitle: b[" CourseTitle"].stringValue, AU: b[" AU"].stringValue, Credit: b[" Credit"].stringValue, Instructor: b[" Instructor"].stringValue, ClassTime: b[" ClassTime"].stringValue, Classroom: b[" classroom"].stringValue)
+                
+                        }
+    
+                }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            /*
+            Alamofire.request(url + serverresponse+"club" ).responseJSON { response in
                 switch response.result{
                 case .success(_):
                     if let data = response.result.value{
@@ -89,6 +138,8 @@ class LoginViewController: UIViewController {
                     print(error)
                 }
             }
+            */
+            
             /*
              let myAlert = UIAlertController(title: "Alert", message: "Login is sucessful", preferredStyle: UIAlertControllerStyle.alert)
              let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)  {    action in
@@ -96,7 +147,7 @@ class LoginViewController: UIViewController {
              }
              myAlert.addAction(okAction)
              self.present(myAlert,animated: true,completion: nil)
-             */
+          */
         }
         
         
@@ -114,6 +165,51 @@ class LoginViewController: UIViewController {
         myAlert.addAction(okAction)
         
         self.present(myAlert, animated: true, completion:nil)
+    }
+    
+    func createUserTable() {
+        let createTable = self.usersTable.create { (table) in
+            table.column(self.id, primaryKey: true)
+            table.column(self.Department)
+            table.column(self.CourseType)
+            table.column(self.CourseNum)
+            table.column(self.Section)
+            table.column(self.CourseTitle)
+            table.column(self.AU)
+            table.column(self.Credit)
+            table.column(self.Instructor)
+            table.column(self.ClassTime)
+            table.column(self.Classroom)
+        }
+        
+        do {
+            try self.databaseUser.run(createTable)
+            print("Created Table")
+        } catch {
+            print(error)
+        }
+    }
+    
+    
+    
+    
+    func DBinsertClass(Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: String, Classroom: String) {
+        let insertClass = self.usersTable.insert(self.Department <- Department,
+                                                 self.CourseType <- CourseType,
+                                                 self.CourseNum <- CourseNum,
+                                                 self.Section <- Section,
+                                                 self.CourseTitle <- CourseTitle,
+                                                 self.AU <- AU,
+                                                 self.Credit <- Credit,
+                                                 self.Instructor <- Instructor,
+                                                 self.ClassTime <- ClassTime,
+                                                 self.Classroom <- Classroom)
+        do {
+            try self.databaseUser.run(insertClass)
+            print("Inserted User")
+        } catch {
+            print(error)
+        }
     }
     
 }
