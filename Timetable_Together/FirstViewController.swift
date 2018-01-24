@@ -140,21 +140,22 @@ class FirstViewController: UIViewController{
         // 중복과목은 CourseNum을 통해서 같은 항목 추가 안함
         DBdeleteOneSemester(Semester: "2018S")
         DBdeleteAll()
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2019S", Grade: "4.0")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "3.7")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS316", Section: "", CourseTitle: "이산 아무거나", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2015S", Grade: "3.4")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS311", Section: "", CourseTitle: "전산기조직", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2014F", Grade: "3.3")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS315", Section: "", CourseTitle: "이산 수학", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2013S", Grade: "3.2")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2019S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS316", Section: "", CourseTitle: "이산 아무거나", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2015S", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS311", Section: "", CourseTitle: "전산기조직", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2014F", Grade: "")
+        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS315", Section: "", CourseTitle: "이산 수학", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2013S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS320", Section: "", CourseTitle: "프로그래밍언어", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "1")
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS390", Section: "", CourseTitle: "나이산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "2")
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS366", Section: "", CourseTitle: "이산한산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "1")
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS324", Section: "", CourseTitle: "가이산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
             "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
          DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS319", Section: "", CourseTitle: "중간에 이산 끝", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
+        DBupdateGrade(CourseNum: "CS319", Grade: "2.1")
         
         DBfindClassByTitle(CourseTitlePart: "전산")
         DBfindClassByInstructor(InstructorPart: "석영")

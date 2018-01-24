@@ -35,7 +35,7 @@ class SecondViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
             let fileUrlUser = documentDirectory.appendingPathComponent("userTimeTable").appendingPathExtension("sqlite3")
@@ -66,7 +66,7 @@ class SecondViewController: UIViewController {
         }
         
         //Draw graph if there are any grades
-        if (endSem-startSem > 0) {
+        if (startSem != 0) {
             var totalAverage = averageArray(startSem, endSem, "total")
             var majorAverage = averageArray(startSem, endSem, "major")
             for i in 0...totalAverage.count-1 {
