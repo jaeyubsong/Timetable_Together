@@ -13,6 +13,14 @@ class SecondViewController: UIViewController {
     
     @IBOutlet weak var viewPage: UIView!
     
+    var databaseUserInfo: Connection!
+    let infoTable = Table("userInfo")
+    let Userid = Expression<Int>("id")
+    let Major = Expression<String>("Department")
+    let userName = Expression<String>("userName")
+    let studentId = Expression<String>("studentId")
+    let isRecent = Expression<String>("isRecent")
+    
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
     
@@ -47,6 +55,18 @@ class SecondViewController: UIViewController {
         
         
         createUserTable()
+        
+        do {
+            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrlUser = documentDirectory.appendingPathComponent("userInfo").appendingPathExtension("sqlite3")
+            let databaseUserInfo = try Connection(fileUrlUser.path)
+            self.databaseUserInfo = databaseUserInfo
+        } catch {
+            print (error)
+        }
+        createInfoTable()
+        
+        
         DBlistClasses()
         
         var (startSem, endSem) = getMinMaxSemester()
@@ -118,6 +138,39 @@ class SecondViewController: UIViewController {
         }
     }
     
+    func createInfoTable() {
+        let createTable = self.infoTable.create { (table) in
+            table.column(self.id, primaryKey: true)
+            table.column(self.Department)
+            table.column(self.userName)
+            table.column(self.studentId)
+            table.column(self.isRecent)
+        }
+        
+        do {
+            try self.databaseUserInfo.run(createTable)
+            print("Created Table")
+        } catch {
+            print(error)
+        }
+    }
+    
+    func DBgetMajor() -> String {
+        var returnVal = ""
+        do {
+            let datas = try self.databaseUserInfo.prepare(self.infoTable)
+            for data in datas {
+                returnVal = data[self.Major]
+            }
+        } catch {
+            print (error)
+        }
+        
+        return returnVal
+    }
+    
+    
+    
     func DBlistClasses() {
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
@@ -141,7 +194,7 @@ class SecondViewController: UIViewController {
                 if (user[self.Semester] ==  Semester && user[self.Grade] != "") {
                     var userGrade = Double(user[self.Grade])!
                     TotalGrades.append(userGrade)
-                    if (user[self.CourseType] == "전공선택" || user[self.CourseType] == "전공필수" ) {
+                    if (user[self.CourseType] == "전공선택" || user[self.CourseType] == "전공필수" && DBgetMajor() == user[self.Department]) {
                         MajorGrades.append(userGrade)
                     }
                 }
