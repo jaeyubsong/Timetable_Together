@@ -28,6 +28,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             var inChoiced  = false
             var inValues = false
             
+            if(self.values.count > 0){
             for i in 0...(self.values.count-1){
                 if (self.values[i] == textField!.text!){
                     inValues = true
@@ -38,12 +39,18 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                         }
                     }
                     if (!inChoiced){
+                        
                         self.choiced.append(textField!.text!)
+                        
+                        let club : [String : String] = [
+                            "name" : textField!.text!
+                        ]
+                        
                         let addclub = [
                             "studentid" : self.userstudentid!,
-                            "club" : textField!.text!
-                        ]
-                        Alamofire.request(self.url + "insertclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
+                            "club" : club
+                            ] as [String : Any]
+                        Alamofire.request(self.url + "insertclub", method:.post, parameters: addclub, encoding: JSONEncoding.default).responseString { response in
                             switch response.result {
                             case .success:
                                 let respon  = response.result.value!
@@ -55,11 +62,51 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                     }
                     break
                 }
+                }}
+            if (!inChoiced){
+                self.choiced.append(textField!.text!)
+                
+                let club : [String : String] = [
+                    "name" : textField!.text!
+                ]
+                
+                let addclub = [
+                    "studentid" : self.userstudentid!,
+                    "club" : club
+                    ] as [String : Any]
+                Alamofire.request(self.url + "insertclub", method:.post, parameters: addclub, encoding: JSONEncoding.default).responseString { response in
+                    switch response.result {
+                    case .success:
+                        let respon  = response.result.value!
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+                self.myGroup.reloadData()
             }
             if ( !inValues ){
                 self.values.append(textField!.text!)
                 self.allGroup.reloadData()
                 
+                let club : [String : String] = [
+                "name" : textField!.text!
+                ]
+                
+                let addclub = [
+                    "studentid" : self.userstudentid!,
+                    "club" : club
+                    ] as [String : Any]
+                
+                Alamofire.request(self.url + "addclublist", method:.post, parameters: addclub,encoding: JSONEncoding.default).responseString { response in
+                    switch response.result {
+                    case .success:
+                        print(response.result.value!)
+                    case .failure(let error):
+                        print(error)
+                        
+                    }
+                }
+
                 //서버 모든 그룹에 추가
             }
         }))

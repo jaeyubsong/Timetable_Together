@@ -190,6 +190,8 @@ class FirstViewController: UIViewController{
 //            "studentid" : userstudentid!,
 //            "course" : code
 //        ]
+        var trick = "함께 듣는 사람"
+        
         Alamofire.request(self.url + "getUser").responseJSON{ response in
             switch response.result{
             case .success(_):
@@ -204,9 +206,24 @@ class FirstViewController: UIViewController{
                     if( item["studentid"].stringValue != self.userstudentid ){
                         users.append(item["name"].stringValue)
                     }
+                    var randint = Int(arc4random_uniform(UInt32(users.count)))
+                    for i in 0...randint{
+                        trick = trick + "\n" + users[randint]
+                    }
                     
+                    let alert = UIAlertController(title: "Alert", message: trick, preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
+                        (action: UIAlertAction!) in
+                        self.removeClass(tag: button.tag)
+                        let Title = button.titleLabel!.text!.split(separator: "\n")[0]
+                        self.DBdeleteClass(CourseTitle: String(Title))
+                        
+                        print("Do Delete: " + String(button.tag))
+                    }))
+                    self.present(alert,animated: true,completion: nil)
                 }
-                print(json)
+                //print(json)
             }
             case .failure(let error):
                 print(error)
@@ -214,50 +231,18 @@ class FirstViewController: UIViewController{
             }
             
         }
-//
-//        Alamofire.request(self.url + "getUser").responseJSON { response in
-//            switch response.result{
-//            case .success(_):
-//                if let data = response.result.value{
-//
-//                    let json = JSON(data)
-////                    print(json)
-//                    print(json.arrayValue)
-//                    for item in json.arrayValue{
-//                        print(item["name"].stringValue)
-//
-//                        if( item["studentid"].stringValue != self.userstudentid ){
-//                            users.append(item["name"].stringValue)
-//                        }
-//
-//                    }
-//                    print(json)
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-        print(users)
-        var trick = "함께 듣는 사람"
-//        var randint = arc4random_uniform(UInt32(users.count))
-//        for z in (0...randint){
-//            print(randint)
-//            print(z)
-//            print(users)
-//            trick = trick + "\n" + users[Int(z)]
-//        }
-//
-        let alert = UIAlertController(title: "Alert", message: trick, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
-            (action: UIAlertAction!) in
-            self.removeClass(tag: button.tag)
-            let Title = button.titleLabel!.text!.split(separator: "\n")[0]
-            self.DBdeleteClass(CourseTitle: String(Title))
-            
-            print("Do Delete: " + String(button.tag))
-        }))
-        self.present(alert,animated: true,completion: nil)
+
+        //print(users)
+
+        
+//        print(randint)
+//        print(users[randint])
+////        while(randint>=0){
+////            trick = trick + "\n" + users[randint]
+////            print(trick)
+////        }
+
+        
     }
 
     override func viewDidLoad() {
