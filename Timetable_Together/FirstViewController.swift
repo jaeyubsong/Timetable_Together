@@ -42,16 +42,17 @@ class FirstViewController: UIViewController{
         }
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
             var textField = alert?.textFields![0]
-            if textField?.text != nil{
+            if textField?.text != "" {
                 let temp = Int(textField!.text!)!
                 textField = alert!.textFields![1]
-                if textField?.text != nil{
+                if textField?.text != ""{
                     self.startTime = temp
                     self.endTime = Int(textField!.text!)!
                     if(self.endTime > self.startTime){
                         for view in self.scrollPage.subviews{
                             view.removeFromSuperview()
                         }
+                        //DB 에서 있으면 불러오기 없으면 새로 고침
                         self.viewDidLoad()
                     }else {
                         Error.self
