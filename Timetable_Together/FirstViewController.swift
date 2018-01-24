@@ -96,7 +96,7 @@ class FirstViewController: UIViewController{
     let Semester = Expression<String>("Semester")
     let Grade = Expression<String>("Grade")
     
-    let userstudentid = UserDefaults.standard.bool(forKey: "userstudentid")
+    let userstudentid = UserDefaults.standard.string(forKey: "userstudentid")
     
     override func viewDidLoad() {
         super.viewDidLoad()

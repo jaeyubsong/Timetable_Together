@@ -22,6 +22,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     var filtered = [String]()
     var choiced = [String]()
     let url = "http://143.248.140.251:5480/"
+    let userstudentid = UserDefaults.standard.string(forKey: "userstudentid")
     
     var searchActivated: Bool = false
     
@@ -54,18 +55,36 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                             self.values.append(list[i].stringValue)
                         }
                         print(self.values)
-                        
-                        self.myGroup.reloadData()
+                        self.allGroup.reloadData()
                     }
-                   
-                    
                 }
-                
             case .failure(let error):
                 print(error)
             }
         }
-    
+        
+        let userid = [
+            "studentid" : userstudentid!
+        ]
+        
+        Alamofire.request(url + "getuserclub", method:.post, parameters:userid,encoding: JSONEncoding.default).responseString { response in
+            switch response.result {
+            case .success:
+                // print(response.result.value!)
+                let respon  = response.result.value!
+                print(respon)
+                
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+        
+        
+        
+        
+        
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -110,7 +129,24 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             add.backgroundColor = .lightGray
             choiced.append(values[editActionsForRowAt.row])
             
+            let addclub = [
+                "studentid" : userstudentid!,
+                "club" : values[editActionsForRowAt.row]
+            ]
             
+            Alamofire.request(url + "insertclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
+                switch response.result {
+                case .success:
+                    // print(response.result.value!)
+                    let respon  = response.result.value!
+                    print(respon)
+                  
+                case .failure(let error):
+                    print(error)
+                    
+                }
+            }
+
             
             
             return [add]
@@ -119,6 +155,26 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 print("Delete button tapped")
             }
             del.backgroundColor = UIColor(red: 0.8078, green: 0.2, blue: 0, alpha: 1.0)
+            
+            let addclub = [
+                "studentid" : userstudentid!,
+                "club" : values[editActionsForRowAt.row]
+            ]
+            
+            Alamofire.request(url + "deleteclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
+                switch response.result {
+                case .success:
+                    // print(response.result.value!)
+                    let respon  = response.result.value!
+                    print(respon)
+                    
+                case .failure(let error):
+                    print(error)
+                    
+                }
+            }
+        
+            myGroup.reloadData()
             return [del]
         }
     }
