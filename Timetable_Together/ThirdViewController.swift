@@ -23,13 +23,45 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         alert.addTextField { (textField) in
             textField.placeholder = "그룹명"
         }
-        alert.addAction(UIAlertAction(title: "참여", style: .default, handler: { [weak alert] (_) in
+        alert.addAction(UIAlertAction(title: "등록", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0]
-            // 서버 그룹 리스트에 추가. 유저 참여 그룹 리스트에 추가
-            self.values.append(textField!.text!)
-            self.choiced.append(textField!.text!)
-            self.allGroup.reloadData()
-            self.myGroup.reloadData()
+            var inChoiced  = false
+            var inValues = false
+            
+            for i in 0...(self.values.count-1){
+                if (self.values[i] == textField!.text!){
+                    inValues = true
+                    for j in 0...(self.choiced.count-1){
+                        if (self.choiced[j] == textField!.text!){
+                            inChoiced = true
+                            break;
+                        }
+                    }
+                    if (!inChoiced){
+                        self.choiced.append(textField!.text!)
+                        let addclub = [
+                            "studentid" : self.userstudentid!,
+                            "club" : textField!.text!
+                        ]
+                        Alamofire.request(self.url + "insertclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
+                            switch response.result {
+                            case .success:
+                                let respon  = response.result.value!
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                        self.myGroup.reloadData()
+                    }
+                    break
+                }
+            }
+            if ( !inValues ){
+                self.values.append(textField!.text!)
+                self.allGroup.reloadData()
+                
+                //서버 모든 그룹에 추가
+            }
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -67,7 +99,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 if let data = response.result.value{
                     let json = JSON(data)
                     for item in json.arrayValue{
-                        
                         var list = item["club"].arrayValue
                         for i in 0 ..< list.count{
                             self.values.append(list[i].stringValue)
@@ -151,19 +182,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             Alamofire.request(url + "insertclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
                 switch response.result {
                 case .success:
-                    // print(response.result.value!)
                     let respon  = response.result.value!
-                    print(respon)
-                  
                 case .failure(let error):
                     print(error)
                     
                 }
             }
-
-            
-            
             return [add]
+            
         }else {
             let del = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
                 print("Delete button tapped")
@@ -174,20 +200,14 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                 "studentid" : userstudentid!,
                 "club" : values[editActionsForRowAt.row]
             ]
-            
             Alamofire.request(url + "deleteclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
                 switch response.result {
                 case .success:
-                    // print(response.result.value!)
                     let respon  = response.result.value!
-                    print(respon)
-                    
                 case .failure(let error):
                     print(error)
-                    
                 }
             }
-        
             myGroup.reloadData()
             return [del]
         }

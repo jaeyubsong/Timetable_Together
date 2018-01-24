@@ -115,6 +115,7 @@ class FirstViewController: UIViewController{
         }))
         self.present(alert, animated: true, completion: nil)
     }
+    
     ///end of the semester
     @IBAction func saveButton(_ sender: Any) {
         let alert = UIAlertController(title: "학기를 마치며", message: "성적을 숫자로 입력해 주세요", preferredStyle: UIAlertControllerStyle.alert)
@@ -528,6 +529,7 @@ class FirstViewController: UIViewController{
         let fontName = "Times New Roman"
         let fontSize = 10
         
+        if(time.count>0){
         for i in 0...time.count-1{
             
             let button = UIButton(type: UIButtonType.custom) as UIButton
@@ -556,7 +558,7 @@ class FirstViewController: UIViewController{
             button.addTarget(self, action: #selector(pressButton(_:)), for: .touchUpInside)
             scrollPage.addSubview(button)
         }
-        
+        }
         
         
         
@@ -690,6 +692,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
             }
             
             cell.Classroom.text = filteredData[indexPath.row].Classroom
+            if(times.count>0){
             for time in 0...(times.count-1){
                 
                 if(time==0){
@@ -700,6 +703,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
                     cell.ClassTime.text = cell.ClassTime.text! + times[time]
                 }
                 
+            }
             }
             cell.ClassTime.font.withSize(10)
             cell.Classroom.font.withSize(10)
