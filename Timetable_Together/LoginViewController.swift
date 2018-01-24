@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
             print (error)
         }
         
-        createUserTable()
+        //createUserTable()
         // Do any additional setup after loading the view.
     }
     
@@ -149,28 +149,28 @@ class LoginViewController: UIViewController {
             
             //DBlistClasses()
             /*
-            Alamofire.request(url + serverresponse+"club" ).responseJSON { response in
-                switch response.result{
-                case .success(_):
-                    if let data = response.result.value{
-                        let json = JSON(data)
-                        print("123123")
-                        print(json)
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            */
-            
-            
-             let myAlert = UIAlertController(title: "Alert", message: "Login is sucessful", preferredStyle: UIAlertControllerStyle.alert)
-             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)  {    action in
-             self.performSegue(withIdentifier: "totab", sender: self)
+             Alamofire.request(url + serverresponse+"club" ).responseJSON { response in
+             switch response.result{
+             case .success(_):
+             if let data = response.result.value{
+             let json = JSON(data)
+             print("123123")
+             print(json)
              }
-             myAlert.addAction(okAction)
-             self.present(myAlert,animated: true,completion: nil)
-          
+             case .failure(let error):
+             print(error)
+             }
+             }
+             */
+            
+            
+            let myAlert = UIAlertController(title: "Alert", message: "Login is sucessful", preferredStyle: UIAlertControllerStyle.alert)
+            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)  {    action in
+                self.performSegue(withIdentifier: "totab", sender: self)
+            }
+            myAlert.addAction(okAction)
+            self.present(myAlert,animated: true,completion: nil)
+            
         }
         
         
@@ -259,5 +259,3 @@ class LoginViewController: UIViewController {
  // Pass the selected object to the new view controller.
  }
  */
-
-
