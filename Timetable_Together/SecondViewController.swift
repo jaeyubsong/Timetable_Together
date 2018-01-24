@@ -194,7 +194,7 @@ class SecondViewController: UIViewController {
                     }
                 }
             }
-            if (min == 10000) {
+            if (min == 100000) {
                 min = 0
                 max = 0
             }

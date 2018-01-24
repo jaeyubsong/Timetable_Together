@@ -117,13 +117,17 @@ class FirstViewController: UIViewController{
     ///end of the semester
     @IBAction func saveButton(_ sender: Any) {
         let alert = UIAlertController(title: "학기를 마치며", message: "성적을 숫자로 입력해 주세요", preferredStyle: UIAlertControllerStyle.alert)
-        var subjectOrder = [String]()
+        var subjectCode = [String]()
+        var subjectSemester = [String]()
+        var subjectNum = [String]()
         do{
             let subjects = try self.databaseUser.prepare(self.usersTable)
-            for subject in subjects{
+            for subjectdb in subjects{
                 alert.addTextField { (textField) in
-                    textField.placeholder = subject[self.CourseTitle]
-                    subjectOrder.append(subject[self.CourseTitle])
+                    textField.placeholder = subjectdb[self.CourseTitle]
+                    subjectCode.append(subjectdb[self.CourseNum] + subjectdb[self.Section])
+                    subjectNum.append(subjectdb[self.CourseNum])
+                    subjectSemester.append(subjectdb[self.Semester])
                 }
             }
         }catch{
@@ -132,7 +136,26 @@ class FirstViewController: UIViewController{
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
             for index in 0...((alert?.textFields!.count)!-1){
                 let textField = alert?.textFields![index]
-                self.DBupdateGrade(CourseNum: subjectOrder[index], Grade: (textField!.text!))
+                let subject: [String: String] = [
+                    "semester" : subjectSemester[index],
+                    "code" : subjectCode[index],
+                    "grade" : textField!.text!
+                ]
+                
+                let info : [String: AnyObject] = [
+                    "studentid" : "111111" as AnyObject, //self.userstudentid as AnyObject,
+                    "subject" : subject as AnyObject
+                ]
+                Alamofire.request(self.url + "grade", method:.post, parameters: info, encoding: JSONEncoding.default).responseString { response in
+                    switch response.result {
+                    case .success:
+                        let respon  = response.result.value!
+                    case .failure(let error):
+                        print(error)
+                        
+                    }
+                }
+                self.DBupdateGrade(CourseNum: subjectNum[index], Grade: (textField!.text!))
                 print("Save BUTTON"+textField!.text!)
                 self.DBlistClasses()
                 
@@ -703,14 +726,14 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
             let text = courseTitle + "\n" + classroom
             let userId = self.filteredData[editActionsForRowAt.row].userId
             
-            print(courseNum)
+            
             let subject: [String: String] = [
                 "semester" : semester,
                 "code" : courseNum + section
             ]
             
             let info : [String: AnyObject] = [
-                "studentid" : "20150397" as AnyObject,
+                "studentid" : "111111" as AnyObject, //self.userstudentid as AnyObject,
                 "subject" : subject as AnyObject
             ]
             
@@ -724,7 +747,6 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
                 }
             }
 
-            
             self.DBinsertClass(Department: department, CourseType: courseType, CourseNum: courseNum, Section: section, CourseTitle: courseTitle, AU: au, Credit: credit, Instructor: instructor, ClassTime: classtime, Classroom: classroom, Semester: semester, Grade: grade)
             self.addClass(times, text, userId)
         }
