@@ -12,12 +12,12 @@ import SwiftyJSON
 
 class RegisterPageViewController: UIViewController{
     
-    
-    @IBOutlet weak var userschoolTextField: UITextField!
-    
+    @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var userStudentidTextField: UITextField!
     @IBOutlet weak var userPasswordTextField: UITextField!
     @IBOutlet weak var repeatPasswordTextField: UITextField!
+    @IBOutlet weak var userschoolTextField: UITextField!
+    
     
     let schoollist = ["KAIST", "한양대", "숙명여대","연세대"]
     var userSchool : String?
@@ -38,6 +38,7 @@ class RegisterPageViewController: UIViewController{
     
     @IBAction func registerButtonTapped(_ sender: Any) {
         
+        let userName = userNameTextField.text;
         let userStudentid = userStudentidTextField.text;
         let userPassword = userPasswordTextField.text;
         let userRepeatPassword = repeatPasswordTextField.text;
@@ -66,18 +67,20 @@ class RegisterPageViewController: UIViewController{
         
         
         let userinformation = [
+            "name" : userName!,
             "studentid" : userStudentid!,
             "password" : userPassword!,
             "school" : userSchool!
         ]
         
-        let url = "http://143.248.140.251:80/"
+        let url = "http://143.248.140.251:5480/"
         
         Alamofire.request(url + "post", method:.post, parameters:userinformation,encoding: JSONEncoding.default).responseString { response in
             switch response.result {
             case .success:
                 // print(response.result.value!)
                 let respon  = response.result.value!
+                print(respon)
                 self.response(serverresponse: respon)
                 
             case .failure(let error):
@@ -119,7 +122,7 @@ class RegisterPageViewController: UIViewController{
     }
     
     func createSchoolPicker(){
-        let schoolPicker = UIPickerView()
+        let schoolPicker = UIPickerView().self
         schoolPicker.delegate = self
         userschoolTextField.inputView = schoolPicker
     }
@@ -129,15 +132,26 @@ class RegisterPageViewController: UIViewController{
         toolBar.sizeToFit()
         
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.dismissKeyboard))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(self.dismissKeyboard))
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        userschoolTextField.inputAccessoryView = toolBar
+        /*
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.dismissKeyboard))
         toolBar.setItems([doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         
         userschoolTextField.inputAccessoryView = toolBar
+    */
     }
     
     @objc func dismissKeyboard(){
         view.endEditing(true)
     }
+    
+    
+    
     
 }
 
@@ -159,5 +173,8 @@ extension RegisterPageViewController: UIPickerViewDataSource, UIPickerViewDelega
         userschoolTextField.text = userSchool
         
     }
+    
+    
+    
     
 }
