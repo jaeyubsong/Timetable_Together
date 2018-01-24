@@ -18,6 +18,7 @@ class LoginViewController: UIViewController {
     
     var servermessage : String = ""
     var databaseUser: Connection!
+    var databaseInfo: Connection!
     
     let usersTable = Table("SubjectList")
     
@@ -36,20 +37,37 @@ class LoginViewController: UIViewController {
     //let Semester = Expression<String>("Semester")
     //let Grade = Expression<String>("Grade")
     
+    let infoTable = Table("UserInfo")
+    let userId = Expression<String>("userId")
+    let userPassword = Expression<String>("userPassword")
+    let userMajor = Expression<String>("userMajor")
+    let userCurrent = Expression<String>("userCurrent")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrlUser = documentDirectory.appendingPathComponent("SubjectList").appendingPathExtension("sqlite3")
-            let databaseUser = try Connection(fileUrlUser.path)
+            var documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            var fileUrlUser = documentDirectory.appendingPathComponent("SubjectList").appendingPathExtension("sqlite3")
+            var databaseUser = try Connection(fileUrlUser.path)
             self.databaseUser = databaseUser
             print("created")
         } catch {
             print (error)
         }
         
+        do {
+            var documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            var fileUrlUser = documentDirectory.appendingPathComponent("UserInfo").appendingPathExtension("sqlite3")
+            var databaseInfo = try Connection(fileUrlUser.path)
+            self.databaseInfo = databaseInfo
+            print("created")
+        } catch {
+            print (error)
+        }
+        
         createUserTable()
+        createInfoTable()
         // Do any additional setup after loading the view.
     }
     
@@ -142,35 +160,57 @@ class LoginViewController: UIViewController {
                         }
                         
                     }
+                    
                 case .failure(let error):
                     print(error)
+                }
+            }
+            
+            let userInfo = ["studentid" : "5555"]
+            
+            Alamofire.request(url + "majorInfo", method:.post, parameters:userInfo,encoding: JSONEncoding.default).responseJSON { response in
+                switch response.result {
+                case .success:
+                    // print(response.result.value!)
+                    let respon  = response.result.value!
+                    print("major info response")
+                    let majorResult = JSON(respon)
+                    print(respon)
+                    print("major:",majorResult["major"])
+                    self.DBinsertInfo(userId: String(describing: majorResult["studentid"]), userPassword: String(describing: majorResult["password"]), userMajor: String(describing: majorResult["major"]))
+                    
+                    
+                    
+                case .failure(let error):
+                    print(error)
+                    
                 }
             }
             
             //DBlistClasses()
             /*
-            Alamofire.request(url + serverresponse+"club" ).responseJSON { response in
-                switch response.result{
-                case .success(_):
-                    if let data = response.result.value{
-                        let json = JSON(data)
-                        print("123123")
-                        print(json)
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            */
-            
-            
-             let myAlert = UIAlertController(title: "Alert", message: "Login is sucessful", preferredStyle: UIAlertControllerStyle.alert)
-             let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)  {    action in
-             self.performSegue(withIdentifier: "totab", sender: self)
+             Alamofire.request(url + serverresponse+"club" ).responseJSON { response in
+             switch response.result{
+             case .success(_):
+             if let data = response.result.value{
+             let json = JSON(data)
+             print("123123")
+             print(json)
              }
-             myAlert.addAction(okAction)
-             self.present(myAlert,animated: true,completion: nil)
-          
+             case .failure(let error):
+             print(error)
+             }
+             }
+             */
+            
+            
+            let myAlert = UIAlertController(title: "Alert", message: "Login is sucessful", preferredStyle: UIAlertControllerStyle.alert)
+            let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)  {    action in
+                self.performSegue(withIdentifier: "totab", sender: self)
+            }
+            myAlert.addAction(okAction)
+            self.present(myAlert,animated: true,completion: nil)
+            
         }
         
         
@@ -213,6 +253,22 @@ class LoginViewController: UIViewController {
         }
     }
     
+    func createInfoTable() {
+        let myTable = self.infoTable.create { (table) in
+            table.column(self.userId)
+            table.column(self.userPassword)
+            table.column(self.userMajor)
+            table.column(self.userCurrent)
+        }
+        
+        do {
+            try self.databaseInfo.run(myTable)
+            print("Created user information Table")
+        } catch {
+            print(error)
+        }
+    }
+    
     
     
     
@@ -235,11 +291,58 @@ class LoginViewController: UIViewController {
         }
     }
     
+    func DBinsertInfo(userId: String, userPassword: String, userMajor: String) {
+        let insertInfo = self.infoTable.insert(self.userId <- userId,
+                                               self.userPassword <- userPassword,
+                                               self.userMajor <- userMajor,
+                                               self.userCurrent <- "current")
+        do {
+            try self.databaseInfo.run(insertInfo)
+            print("Inserted User")
+        } catch {
+            print(error)
+        }
+    }
+    
+    func DBdeleteInfo(userId: String) {
+        let userInfo = self.infoTable.filter(self.userId == userId)
+        let deleteInfo = userInfo.delete()
+        do {
+            try self.databaseInfo.run(deleteInfo)
+        } catch {
+            print(error)
+        }
+        DBlistInfos()
+    }
+    
+    func DBdeleteAllInfo() {
+        do {
+            let infos = try self.databaseInfo.prepare(self.infoTable)
+            for info in infos {
+                DBdeleteInfo(userId: info[self.userId])
+            }
+        } catch {
+            print(error)
+        }
+        DBlistInfos()
+    }
+    
     func DBlistClasses() {
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 print("userId: \(user[self.id]), Department: \(user[self.Department]), CourseType: \(user[self.CourseType]), CourseNum: \(user[self.CourseNum]), Section: \(user[self.Section]), CourseTitle: \(user[self.CourseTitle]), AU: \(user[self.AU]), Credit: \(user[self.Credit]), Instructor: \(user[self.Instructor]), ClassTime: \(user[self.ClassTime]), Classroom: \(user[self.Classroom])")
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func DBlistInfos() {
+        do {
+            let infos = try self.databaseInfo.prepare(self.infoTable)
+            for info in infos {
+                print("userId: \(info[self.userId]), userPassword: \(info[self.userPassword]), userMajor: \(info[self.userMajor])")
             }
         } catch {
             print(error)
@@ -259,5 +362,3 @@ class LoginViewController: UIViewController {
  // Pass the selected object to the new view controller.
  }
  */
-
-

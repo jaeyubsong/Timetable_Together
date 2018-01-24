@@ -78,9 +78,9 @@ class RegisterPageViewController: UIViewController{
     
     func DBInsert(Department: String, userName: String, studentId: String) {
         let insertInfo = self.infoTable.insert(self.Department <- Department,
-                                                 self.userName <- userName,
-                                                 self.studentId <- studentId,
-                                                 self.isRecent <- "true")
+                                               self.userName <- userName,
+                                               self.studentId <- studentId,
+                                               self.isRecent <- "true")
         do {
             try self.databaseUserInfo.run(insertInfo)
             print("Inserted Info")
@@ -95,6 +95,7 @@ class RegisterPageViewController: UIViewController{
         let userStudentid = userStudentidTextField.text;
         let userPassword = userPasswordTextField.text;
         let userRepeatPassword = repeatPasswordTextField.text;
+        let thisUserMajor = userMajor.text;
         
         
         // CHeck for empty fields
@@ -124,7 +125,7 @@ class RegisterPageViewController: UIViewController{
             "studentid" : userStudentid!,
             "password" : userPassword!,
             "school" : userSchool!,
-            "major" : major,
+            "major" : thisUserMajor!,
             "club" : [],
             "subject" : [],
             ] as [String : Any]
@@ -204,12 +205,12 @@ class RegisterPageViewController: UIViewController{
         toolBar.isUserInteractionEnabled = true
         userschoolTextField.inputAccessoryView = toolBar
         /*
-        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.dismissKeyboard))
-        toolBar.setItems([doneButton], animated: false)
-        toolBar.isUserInteractionEnabled = true
-        
-        userschoolTextField.inputAccessoryView = toolBar
-    */
+         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.dismissKeyboard))
+         toolBar.setItems([doneButton], animated: false)
+         toolBar.isUserInteractionEnabled = true
+         
+         userschoolTextField.inputAccessoryView = toolBar
+         */
     }
     
     @objc func dismissKeyboard(){

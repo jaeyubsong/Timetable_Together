@@ -13,13 +13,12 @@ class SecondViewController: UIViewController {
     
     @IBOutlet weak var viewPage: UIView!
     
-    var databaseUserInfo: Connection!
-    let infoTable = Table("userInfo")
-    let Userid = Expression<Int>("id")
-    let Major = Expression<String>("Department")
-    let userName = Expression<String>("userName")
-    let studentId = Expression<String>("studentId")
-    let isRecent = Expression<String>("isRecent")
+    var databaseInfo: Connection!
+    let infoTable = Table("UserInfo")
+    let userId = Expression<String>("userId")
+    let userPassword = Expression<String>("userPassword")
+    let userMajor = Expression<String>("userMajor")
+    let userCurrent = Expression<String>("userCurrent")
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
@@ -40,6 +39,11 @@ class SecondViewController: UIViewController {
     let Classroom = Expression<String>("Classroom")
     let Semester = Expression<String>("Semester")
     let Grade = Expression<String>("Grade")
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        self.viewDidLoad()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,10 +61,11 @@ class SecondViewController: UIViewController {
         createUserTable()
         
         do {
-            let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let fileUrlUser = documentDirectory.appendingPathComponent("userInfo").appendingPathExtension("sqlite3")
-            let databaseUserInfo = try Connection(fileUrlUser.path)
-            self.databaseUserInfo = databaseUserInfo
+            var documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            var fileUrlUser = documentDirectory.appendingPathComponent("UserInfo").appendingPathExtension("sqlite3")
+            var databaseInfo = try Connection(fileUrlUser.path)
+            self.databaseInfo = databaseInfo
+            print("created")
         } catch {
             print (error)
         }
@@ -139,17 +144,16 @@ class SecondViewController: UIViewController {
     }
     
     func createInfoTable() {
-        let createTable = self.infoTable.create { (table) in
-            table.column(self.id, primaryKey: true)
-            table.column(self.Department)
-            table.column(self.userName)
-            table.column(self.studentId)
-            table.column(self.isRecent)
+        let myTable = self.infoTable.create { (table) in
+            table.column(self.userId)
+            table.column(self.userPassword)
+            table.column(self.userMajor)
+            table.column(self.userCurrent)
         }
         
         do {
-            try self.databaseUserInfo.run(createTable)
-            print("Created Table")
+            try self.databaseInfo.run(myTable)
+            print("Created user information Table")
         } catch {
             print(error)
         }
@@ -158,9 +162,9 @@ class SecondViewController: UIViewController {
     func DBgetMajor() -> String {
         var returnVal = ""
         do {
-            let datas = try self.databaseUserInfo.prepare(self.infoTable)
+            let datas = try self.databaseInfo.prepare(self.infoTable)
             for data in datas {
-                returnVal = data[self.Major]
+                returnVal = data[self.userMajor]
             }
         } catch {
             print (error)
@@ -194,7 +198,9 @@ class SecondViewController: UIViewController {
                 if (user[self.Semester] ==  Semester && user[self.Grade] != "") {
                     var userGrade = Double(user[self.Grade])!
                     TotalGrades.append(userGrade)
-                    if (user[self.CourseType] == "전공선택" || user[self.CourseType] == "전공필수" && DBgetMajor() == user[self.Department]) {
+                    if ( (user[self.CourseType] == "전공선택" || user[self.CourseType] == "전공필수") && DBgetMajor() == user[self.Department]) {
+                        print("Major by DBgetMajor() ",DBgetMajor())
+                        print("Major by user[self.Department]", user[self.Department])
                         MajorGrades.append(userGrade)
                     }
                 }
