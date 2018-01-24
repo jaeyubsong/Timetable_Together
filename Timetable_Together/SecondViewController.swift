@@ -78,7 +78,7 @@ class SecondViewController: UIViewController {
             }
             let viewPageHeight = Int(viewPage.frame.size.height)
             
-            drawSquare(30, 0, 15, 540, UIColor.blue)
+            //drawSquare(30, 0, 15, 540, UIColor.blue)
             print("Screen size is: ",viewPageHeight)
             drawGraph(topX: 30, topY: 20, bottomX: Int(screenWidth)-60, bottomY: viewPageHeight/2-20, minSem: startSem, maxSem: endSem, grades: totalAverage)
         }
@@ -223,6 +223,11 @@ class SecondViewController: UIViewController {
         }
     }
     
+//    func shortSem(_ longSem: String) -> String{
+//        var arrayChars = Array(longSem)
+//
+//    }
+//
     func drawSquare(_ topX: Int, _ topY: Int, _ bottomX: Int, _ bottomY: Int, _ color: UIColor) {
         let squarePath = UIBezierPath() /// 1
         squarePath.move(to: CGPoint(x: topX, y: topY))
@@ -237,6 +242,16 @@ class SecondViewController: UIViewController {
         viewPage.layer.addSublayer(square)
     }
     
+    func addTextLabel(_ topX: Int, _ topY: Int, _ bottomX: Int, _ bottomY: Int, _ text: String,  _ fontSize: Int, _ color: UIColor) {
+        
+        let label = UILabel(frame: CGRect(x: topX, y: topY, width: bottomX-topX, height: bottomY-topY))
+        label.text = text
+        label.textAlignment = .center
+        label.font = UIFont(name:"Times New Roman", size: CGFloat(fontSize))
+        label.textColor = color
+        viewPage.addSubview(label)
+    }
+    
     func averageArray(_ startSem: Int, _ endSem: Int, _ gradeType: String) -> [Double] {
         var averageArray = [Double]()
         if (gradeType == "total") {
@@ -246,8 +261,8 @@ class SecondViewController: UIViewController {
                     print (Int2Sem(i), "has no grades")
                     averageArray.append(0.0)
                 } else {
-                    print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*1000).rounded() / 1000)
-                    averageArray.append( (getAverage(Array: currentSem)*1000).rounded() / 1000 )
+                    print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*100).rounded() / 100)
+                    averageArray.append( (getAverage(Array: currentSem)*100).rounded() / 100 )
                 }
             }
         } else if (gradeType == "major") {
@@ -257,8 +272,8 @@ class SecondViewController: UIViewController {
                     print (Int2Sem(i), "has no grades")
                     averageArray.append(0.0)
                 } else {
-                    print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*1000).rounded() / 1000)
-                    averageArray.append( (getAverage(Array: currentSem)*1000).rounded() / 1000 )
+                    print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*100).rounded() / 100)
+                    averageArray.append( (getAverage(Array: currentSem)*100).rounded() / 100 )
                 }
             }
         } else {
@@ -271,16 +286,30 @@ class SecondViewController: UIViewController {
         var validSemester: Int = 0
         for i in 0...gradeArray.count-1 {
             if gradeArray[i] != 0.0 {
-                validSemester += 0
+                validSemester += 1
             }
         }
         return validSemester
     }
     
     func drawGraph(topX: Int, topY: Int, bottomX: Int, bottomY: Int, minSem: Int, maxSem: Int, grades: [Double]) {
-        valid
+        let borderLine = validSemNums(gradeArray: grades)+1
+        print("borderLine:",borderLine)
+        var counter = 0
+        
+        print("Graph with coordinates:", topX, topY, bottomX, bottomY)
+        
         for i in 0...maxSem-minSem {
-            drawSquare
+            if (grades[i] != 0) {
+                counter += 1
+                var leftX = topX + (bottomX - topX) / borderLine * counter - 7
+                var leftY = topY + Int((430.0-grades[i]*100) / 430.0 * Double(bottomY - topY))
+                var rightX = topX + (bottomX - topX) / borderLine * counter + 7
+                var rightY = bottomY - 20
+                drawSquare(leftX , leftY , rightX, rightY, UIColor.black)
+                addTextLabel(leftX, bottomY-15, rightX, bottomY, String(grades[i]), 6, UIColor.black)
+                print("Drew graph of", Int2Sem(minSem + i ),":",grades[i], "with coordinates: (", leftX, leftY, rightX, rightY, ")","current Counter:",counter)
+            }
         }
     }
     
