@@ -22,6 +22,7 @@ class LoginViewController: UIViewController {
     let usersTable = Table("SubjectList")
     
     //let id = Expression<Int>("id")
+    let id = Expression<Int>("id")
     let Department = Expression<String>("Department")
     let CourseType = Expression<String>("CourseType")
     let CourseNum = Expression<String>("CourseNum")
@@ -47,7 +48,8 @@ class LoginViewController: UIViewController {
         } catch {
             print (error)
         }
- 
+        
+        createUserTable()
         // Do any additional setup after loading the view.
     }
     
@@ -113,7 +115,7 @@ class LoginViewController: UIViewController {
                         let json = JSON(data)
                         for item in json{
                             let b = item.1
-                            
+                            print(b[" CourseNum"])
                             self.DBinsertClass(Department: b["Department"].stringValue, CourseType: b[" CourseType"].stringValue, CourseNum: b[" CourseNum"].stringValue, Section: b[" Section"].stringValue, CourseTitle: b[" CourseTitle"].stringValue, AU: b[" AU"].stringValue, Credit: b[" Credit"].stringValue, Instructor: b[" Instructor"].stringValue, ClassTime: b[" ClassTime"].stringValue, Classroom: b[" classroom"].stringValue)
                 
                         }
@@ -164,6 +166,32 @@ class LoginViewController: UIViewController {
         
         self.present(myAlert, animated: true, completion:nil)
     }
+    
+    func createUserTable() {
+        let createTable = self.usersTable.create { (table) in
+            table.column(self.id, primaryKey: true)
+            table.column(self.Department)
+            table.column(self.CourseType)
+            table.column(self.CourseNum)
+            table.column(self.Section)
+            table.column(self.CourseTitle)
+            table.column(self.AU)
+            table.column(self.Credit)
+            table.column(self.Instructor)
+            table.column(self.ClassTime)
+            table.column(self.Classroom)
+        }
+        
+        do {
+            try self.databaseUser.run(createTable)
+            print("Created Table")
+        } catch {
+            print(error)
+        }
+    }
+    
+    
+    
     
     func DBinsertClass(Department: String, CourseType: String, CourseNum: String, Section: String, CourseTitle: String, AU: String, Credit: String, Instructor: String, ClassTime: String, Classroom: String) {
         let insertClass = self.usersTable.insert(self.Department <- Department,
