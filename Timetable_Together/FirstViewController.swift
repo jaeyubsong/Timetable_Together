@@ -145,7 +145,7 @@ class FirstViewController: UIViewController{
                 ]
                 
                 let info : [String: AnyObject] = [
-                    "studentid" : "111111" as AnyObject, //self.userstudentid as AnyObject,
+                    "studentid" : self.userstudentid as AnyObject, //self.userstudentid as AnyObject,
                     "subject" : subject as AnyObject
                 ]
                 Alamofire.request(self.url + "grade", method:.post, parameters: info, encoding: JSONEncoding.default).responseString { response in
@@ -181,8 +181,73 @@ class FirstViewController: UIViewController{
     }
     ///subjectButton
     @objc func pressButton(_ button: UIButton) {
-        //같이 듣는 사람들 목록(서버연동)
-        let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: UIAlertControllerStyle.alert)
+ 
+        //let code = DBfindCode(title: button.titleLabel!.text!)
+  
+        var users = [String]()
+        
+//        let info : [String : String ] = [
+//            "studentid" : userstudentid!,
+//            "course" : code
+//        ]
+        Alamofire.request(self.url + "getUser").responseJSON{ response in
+            switch response.result{
+            case .success(_):
+            if let data = response.result.value{
+                
+                let json = JSON(data)
+                //                    print(json)
+                print(json.arrayValue)
+                for item in json.arrayValue{
+                    print(item["name"].stringValue)
+                    
+                    if( item["studentid"].stringValue != self.userstudentid ){
+                        users.append(item["name"].stringValue)
+                    }
+                    
+                }
+                print(json)
+            }
+            case .failure(let error):
+                print(error)
+            
+            }
+            
+        }
+//
+//        Alamofire.request(self.url + "getUser").responseJSON { response in
+//            switch response.result{
+//            case .success(_):
+//                if let data = response.result.value{
+//
+//                    let json = JSON(data)
+////                    print(json)
+//                    print(json.arrayValue)
+//                    for item in json.arrayValue{
+//                        print(item["name"].stringValue)
+//
+//                        if( item["studentid"].stringValue != self.userstudentid ){
+//                            users.append(item["name"].stringValue)
+//                        }
+//
+//                    }
+//                    print(json)
+//                }
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+        print(users)
+        var trick = "함께 듣는 사람"
+//        var randint = arc4random_uniform(UInt32(users.count))
+//        for z in (0...randint){
+//            print(randint)
+//            print(z)
+//            print(users)
+//            trick = trick + "\n" + users[Int(z)]
+//        }
+//
+        let alert = UIAlertController(title: "Alert", message: trick, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
             (action: UIAlertAction!) in
@@ -197,8 +262,6 @@ class FirstViewController: UIViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print(userstudentid)
         
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
@@ -291,6 +354,57 @@ class FirstViewController: UIViewController{
         } catch {
             print(error)
         }
+    }
+    
+    
+    
+    func DBfindCode(title : String) -> String {
+//        let arr = Array(title)
+//        var section = ""
+//        var afterTitle = false
+//        for letter in arr{
+//            if (letter != " " && !afterTitle){
+//                continue
+//            }else if (letter != " " && afterTitle){
+//                section = letter
+//                break
+//            }else if (letter == " " && !afterTitle){
+//                afterTitle = true
+//            }else if (letter == " " && afterTitle){
+//                break
+//            }else {
+//                break
+//            }
+//        }
+        let parse = title.split(separator: " ")
+        let sectionwith = parse[1].split(separator: "\n")
+        var section = " "
+        let Title = parse[0]
+        do {
+            let subjects = try self.databaseAllSubject.prepare(self.subjectsTable)
+            if(sectionwith.count > 1){
+                section = String(sectionwith[0])
+                //print("Section " + section)
+            }else{
+                print("IN no section")
+                for subject in subjects {
+                    if (subject[self.sCourseTitle] == Title) {
+                        return subject[self.sCourseNum]
+                    }
+                }
+            }
+            for subject in subjects {
+                if (subject[self.sCourseTitle] == Title ){
+                    if( subject[self.sSection] == section) {
+                        return subject[self.sCourseNum] + subject[self.sSection]
+                    }
+                }
+            }
+        }catch{
+            return String(describing: error)
+        }
+        
+        return " "
     }
     
     func DBupdateGrade(CourseNum: String, Grade: String) {
@@ -730,7 +844,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
             let grade = self.filteredData[editActionsForRowAt.row].Grade
             
             let times = classtime.split(separator: "\n")
-            let text = courseTitle + "\n" + classroom
+            let text = courseTitle + " " + section +  "\n" + classroom
             let userId = self.filteredData[editActionsForRowAt.row].userId
             
             
@@ -740,7 +854,7 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
             ]
             
             let info : [String: AnyObject] = [
-                "studentid" : "111111" as AnyObject, //self.userstudentid as AnyObject,
+                "studentid" : self.userstudentid as AnyObject, //self.userstudentid as AnyObject,
                 "subject" : subject as AnyObject
             ]
             

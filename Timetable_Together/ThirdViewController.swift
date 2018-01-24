@@ -103,7 +103,6 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
                         for i in 0 ..< list.count{
                             self.values.append(list[i].stringValue)
                         }
-                        print(self.values)
                         self.allGroup.reloadData()
                     }
                 }
@@ -116,21 +115,38 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             "studentid" : userstudentid!
         ]
         
-        Alamofire.request(url + "getuserclub", method:.post, parameters:userid,encoding: JSONEncoding.default).responseString { response in
-            switch response.result {
+        Alamofire.request(url + "getuserclub", method:.post, parameters: userid, encoding: JSONEncoding.default).responseJSON {
+            response in switch response.result{
             case .success:
-                // print(response.result.value!)
-                let respon  = response.result.value!
-                print(respon)
-                
+                if let data = response.result.value{
+                    let json = JSON(data)
+                    for item in json["club"].arrayValue{
+                        print(item["name"].stringValue)
+                        self.choiced.append(item["name"].stringValue)
+                    }
+                    self.myGroup.reloadData()
+                }
             case .failure(let error):
                 print(error)
-                
+
             }
         }
         
 
     }
+//
+//    func parseData(JSONData: Data) {
+// self.parseData(JSONData: response.data!)
+//        do {
+//            let readableJSON = try JSONDecoder().decode([String].self,from : JSONData)
+//            print(readableJSON)
+//        }
+//        catch {
+//            print(error)
+//        }
+//    }
+
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -174,12 +190,16 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             add.backgroundColor = .lightGray
             choiced.append(values[editActionsForRowAt.row])
             
-            let addclub = [
-                "studentid" : userstudentid!,
-                "club" : values[editActionsForRowAt.row]
+            let club : [String : String] = [
+                "name" : values[editActionsForRowAt.row]
             ]
             
-            Alamofire.request(url + "insertclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
+            let addclub = [
+                "studentid" : userstudentid! ,
+                "club" : club
+                ] as [String : Any]
+            
+            Alamofire.request(url + "insertclub", method:.post, parameters: addclub, encoding: JSONEncoding.default).responseString { response in
                 switch response.result {
                 case .success:
                     let respon  = response.result.value!
@@ -196,10 +216,16 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
             del.backgroundColor = UIColor(red: 0.8078, green: 0.2, blue: 0, alpha: 1.0)
             
+            let club : [String : String] = [
+                "name" : values[editActionsForRowAt.row]
+            ]
+            
+            
             let addclub = [
                 "studentid" : userstudentid!,
-                "club" : values[editActionsForRowAt.row]
-            ]
+                "club" : club
+            ] as [String : Any]
+            
             Alamofire.request(url + "deleteclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
                 switch response.result {
                 case .success:
