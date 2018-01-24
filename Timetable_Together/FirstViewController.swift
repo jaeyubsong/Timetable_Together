@@ -185,24 +185,17 @@ class FirstViewController: UIViewController{
 
         createUserTable()
         
-        /// 중복과목은 CourseNum을 통해서 같은 항목 추가 안함
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS204", Section: "A", CourseTitle: "이산구조", AU: "0", Credit: "3.0:0:3.0", Instructor: "강성원", ClassTime: "월 13:00~14:30\n수 13:00~14:30", Classroom: "(E3)정보전자공학동2112", Semester: "2018S", Grade: "")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS316", Section: "", CourseTitle: "이산 아무거나", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS311", Section: "", CourseTitle: "전산기조직", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS315", Section: "", CourseTitle: "이산 수학", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS320", Section: "", CourseTitle: "프로그래밍언어", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "1")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS390", Section: "", CourseTitle: "나이산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "2")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS366", Section: "", CourseTitle: "이산한산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
+            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "1")
         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS324", Section: "", CourseTitle: "가이산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
             "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
          DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS319", Section: "", CourseTitle: "중간에 이산 끝", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
         DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
         
-        /// DBdeleteAllClass()
         DBlistClasses()
         
         CreateTimeTable(startTime: startTime, endTime: endTime)
@@ -298,13 +291,24 @@ class FirstViewController: UIViewController{
         }
     }
     
-    func DBdeleteAllClass(Semester: String) {
+    func DBdeleteOneSemester(Semester: String) {
         do {
             let users = try self.databaseUser.prepare(self.usersTable)
             for user in users {
                 if (user[self.Semester] == Semester) {
                     DBdeleteClass(CourseTitle: user[self.CourseTitle])
                 }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    func DBdeleteAll() {
+        do {
+            let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                DBdeleteClass(CourseTitle: user[self.CourseTitle])
             }
         } catch {
             print(error)
