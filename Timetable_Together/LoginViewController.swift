@@ -125,6 +125,8 @@ class LoginViewController: UIViewController {
                     print(error)
                 }
             }
+            
+            DBlistClasses()
             /*
             Alamofire.request(url + serverresponse+"club" ).responseJSON { response in
                 switch response.result{
@@ -140,14 +142,14 @@ class LoginViewController: UIViewController {
             }
             */
             
-            /*
+            
              let myAlert = UIAlertController(title: "Alert", message: "Login is sucessful", preferredStyle: UIAlertControllerStyle.alert)
              let okAction = UIAlertAction(title: "Ok", style: UIAlertActionStyle.default)  {    action in
              self.performSegue(withIdentifier: "totab", sender: self)
              }
              myAlert.addAction(okAction)
              self.present(myAlert,animated: true,completion: nil)
-          */
+          
         }
         
         
@@ -211,6 +213,18 @@ class LoginViewController: UIViewController {
             print(error)
         }
     }
+    
+    func DBlistClasses() {
+        do {
+            let users = try self.databaseUser.prepare(self.usersTable)
+            for user in users {
+                print("userId: \(user[self.id]), Department: \(user[self.Department]), CourseType: \(user[self.CourseType]), CourseNum: \(user[self.CourseNum]), Section: \(user[self.Section]), CourseTitle: \(user[self.CourseTitle]), AU: \(user[self.AU]), Credit: \(user[self.Credit]), Instructor: \(user[self.Instructor]), ClassTime: \(user[self.ClassTime]), Classroom: \(user[self.Classroom])")
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     
 }
 

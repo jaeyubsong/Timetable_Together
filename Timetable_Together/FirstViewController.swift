@@ -133,7 +133,6 @@ class FirstViewController: UIViewController{
     
     
     var databaseUser: Connection!
-    
     let usersTable = Table("userTimeTable")
     let id = Expression<Int>("id")
     let Department = Expression<String>("Department")
@@ -149,6 +148,20 @@ class FirstViewController: UIViewController{
     let Semester = Expression<String>("Semester")
     let Grade = Expression<String>("Grade")
     
+    var databaseAllSubject: Connection!
+    let subjectsTable = Table("SubjectList")
+    let sid = Expression<Int>("id")
+    let sDepartment = Expression<String>("Department")
+    let sCourseType = Expression<String>("CourseType")
+    let sCourseNum = Expression<String>("CourseNum")
+    let sSection = Expression<String>("Section")
+    let sCourseTitle = Expression<String>("CourseTitle")
+    let sAU = Expression<String>("AU")
+    let sCredit = Expression<String>("Credit")
+    let sInstructor = Expression<String>("Instructor")
+    let sClassTime = Expression<String>("ClassTime")
+    let sClassroom = Expression<String>("Classroom")
+    
     
     var startTime = 8
     var endTime = 18
@@ -161,6 +174,11 @@ class FirstViewController: UIViewController{
             let fileUrlUser = documentDirectory.appendingPathComponent("userTimeTable").appendingPathExtension("sqlite3")
             let databaseUser = try Connection(fileUrlUser.path)
             self.databaseUser = databaseUser
+            
+            let documentDirectorySubject = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+            let fileUrlUserSubject = documentDirectorySubject.appendingPathComponent("SubjectList").appendingPathExtension("sqlite3")
+            let databaseAllSubject = try Connection(fileUrlUserSubject.path)
+            self.databaseAllSubject = databaseAllSubject
         } catch {
             print (error)
         }
@@ -298,11 +316,11 @@ class FirstViewController: UIViewController{
         var secondClass = [Class]()
         do {
             //모든 과목 다들어있는 디비에서 찾기
-            let users = try self.databaseUser.prepare(self.usersTable)
-            for user in users {
-                if (user[self.CourseTitle].contains(CourseTitlePart)) {
-                    let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
-                    if (user[self.CourseTitle].prefix(CourseTitlePart.count) == CourseTitlePart) {
+            let subjects = try self.databaseAllSubject.prepare(self.subjectsTable)
+            for subject in subjects {
+                if (subject[self.CourseTitle].contains(CourseTitlePart)) {
+                    let oneClass = Class(userId: subject[self.sid], Department: subject[self.sDepartment], CourseType: subject[self.sCourseType], CourseNum: subject[self.sCourseNum], Section: subject[self.sSection], CourseTitle: subject[self.sCourseTitle], AU: subject[self.sAU], Credit: subject[self.sCredit], Instructor: subject[self.sInstructor], ClassTime: subject[self.sClassTime], Classroom: subject[self.sClassroom], Semester: "", Grade: "")
+                    if (subject[self.sCourseTitle].prefix(CourseTitlePart.count) == CourseTitlePart) {
                         firstClass.append(oneClass)
                     } else {
                         secondClass.append(oneClass)
@@ -321,11 +339,11 @@ class FirstViewController: UIViewController{
         var secondClass = [Class]()
         do {
             //모든 과목 다들어있는 디비에서 찾기
-            let users = try self.databaseUser.prepare(self.usersTable)
-            for user in users {
-                if (user[self.Instructor].contains(InstructorPart)) {
-                    let oneClass = Class(userId: user[self.id], Department: user[self.Department], CourseType: user[self.CourseType], CourseNum: user[self.CourseNum], Section: user[self.Section], CourseTitle: user[self.CourseTitle], AU: user[self.AU], Credit: user[self.Credit], Instructor: user[self.Instructor], ClassTime: user[self.ClassTime], Classroom: user[self.Classroom], Semester: user[self.Semester], Grade: user[self.Grade])
-                    if (user[self.Instructor].prefix(InstructorPart.count) == InstructorPart) {
+            let subjects = try self.databaseAllSubject.prepare(self.subjectsTable)
+            for subject in subjects {
+                if (subject[self.Instructor].contains(InstructorPart)) {
+                    let oneClass = Class(userId: subject[self.sid], Department: subject[self.sDepartment], CourseType: subject[self.sCourseType], CourseNum: subject[self.sCourseNum], Section: subject[self.sSection], CourseTitle: subject[self.sCourseTitle], AU: subject[self.sAU], Credit: subject[self.sCredit], Instructor: subject[self.sInstructor], ClassTime: subject[self.sClassTime], Classroom: subject[self.sClassroom], Semester: "", Grade: "")
+                    if (subject[self.sInstructor].prefix(InstructorPart.count) == InstructorPart) {
                         firstClass.append(oneClass)
                     } else {
                         secondClass.append(oneClass)
