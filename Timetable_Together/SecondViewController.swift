@@ -10,7 +10,6 @@ import UIKit
 import SQLite
 
 class SecondViewController: UIViewController {
-    
     @IBOutlet weak var viewPage: UIView!
     
     let screenWidth = UIScreen.main.bounds.width
@@ -32,6 +31,11 @@ class SecondViewController: UIViewController {
     let Classroom = Expression<String>("Classroom")
     let Semester = Expression<String>("Semester")
     let Grade = Expression<String>("Grade")
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        self.viewDidLoad()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
