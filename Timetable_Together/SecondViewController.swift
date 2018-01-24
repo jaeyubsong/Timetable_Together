@@ -78,9 +78,11 @@ class SecondViewController: UIViewController {
             }
             let viewPageHeight = Int(viewPage.frame.size.height)
             
-            //drawSquare(30, 0, 15, 540, UIColor.blue)
+            drawSquare(0, 20, Int(screenWidth), viewPageHeight/2-20, UIColor.blue)
             print("Screen size is: ",viewPageHeight)
-            drawGraph(topX: 30, topY: 20, bottomX: Int(screenWidth)-60, bottomY: viewPageHeight/2-20, minSem: startSem, maxSem: endSem, grades: totalAverage)
+            drawGraph(topX: 0, topY: 20, bottomX: Int(screenWidth), bottomY: viewPageHeight/2-20, minSem: startSem, maxSem: endSem, grades: totalAverage)
+            
+            drawSquare(0, viewPageHeight/2+20, Int(screenWidth), viewPageHeight-20, UIColor.blue)
         }
         
         
@@ -223,11 +225,15 @@ class SecondViewController: UIViewController {
         }
     }
     
-//    func shortSem(_ longSem: String) -> String{
-//        var arrayChars = Array(longSem)
-//
-//    }
-//
+    func shortSem(_ longSem: String) -> String{
+        var resultArr = [Character]()
+        var arrayChars = Array(longSem)
+        for i in (2...4) {
+            resultArr.append(arrayChars[i])
+        }
+        return String(resultArr)
+    }
+
     func drawSquare(_ topX: Int, _ topY: Int, _ bottomX: Int, _ bottomY: Int, _ color: UIColor) {
         let squarePath = UIBezierPath() /// 1
         squarePath.move(to: CGPoint(x: topX, y: topY))
@@ -250,6 +256,12 @@ class SecondViewController: UIViewController {
         label.font = UIFont(name:"Times New Roman", size: CGFloat(fontSize))
         label.textColor = color
         viewPage.addSubview(label)
+    }
+    func addLine(_ x: Int, _ y: Int, _ width: Int, _ height: Int, _ color: UIColor) {
+        let leftLine = UIView(frame: CGRect(x: x, y: y, width: width, height: height))
+        leftLine.backgroundColor = color
+        leftLine.tag = 20
+        viewPage.addSubview(leftLine)
     }
     
     func averageArray(_ startSem: Int, _ endSem: Int, _ gradeType: String) -> [Double] {
@@ -299,16 +311,40 @@ class SecondViewController: UIViewController {
         
         print("Graph with coordinates:", topX, topY, bottomX, bottomY)
         
+        // Draw Graph Border
+        //Horizontal
+        addLine(topX+10, topY, bottomX-topX-20, 3, UIColor.black)
+        addLine(bottomX+10, bottomY, bottomX-topX-20, 3, UIColor.black)
+        //Vertical
+        addLine(topX+10, topY, 3, bottomY-topY, UIColor.black)
+        addLine(bottomX+10, bottomY, 3, bottomY-topY, UIColor.black)
+        
         for i in 0...maxSem-minSem {
             if (grades[i] != 0) {
                 counter += 1
-                var leftX = topX + (bottomX - topX) / borderLine * counter - 7
-                var leftY = topY + Int((430.0-grades[i]*100) / 430.0 * Double(bottomY - topY))
-                var rightX = topX + (bottomX - topX) / borderLine * counter + 7
-                var rightY = bottomY - 20
-                drawSquare(leftX , leftY , rightX, rightY, UIColor.black)
-                addTextLabel(leftX, bottomY-15, rightX, bottomY, String(grades[i]), 6, UIColor.black)
-                print("Drew graph of", Int2Sem(minSem + i ),":",grades[i], "with coordinates: (", leftX, leftY, rightX, rightY, ")","current Counter:",counter)
+                
+                // Add bars
+                var BleftX = topX + (bottomX - topX) / borderLine * counter - 7
+                var BleftY = topY + 30 + Int((430.0-grades[i]*100) / 430.0 * Double(bottomY - topY))
+                var BrightX = topX + (bottomX - topX) / borderLine * counter + 7
+                var BrightY = bottomY - 50
+                drawSquare(BleftX , BleftY , BrightX, BrightY, UIColor.black)
+                
+                // Add semester label
+                var SleftX = topX + Int( Double(bottomX - topX) / Double(borderLine) * (Double(counter) - 0.5) )
+                var SleftY = BrightY + 5
+                var SrightX = topX + Int( Double(bottomX - topX) / Double(borderLine) * (Double(counter) + 0.5) )
+                var SrightY = SleftY + 15
+                addTextLabel(SleftX, SleftY, SrightX, SrightY, shortSem(String(Int2Sem(minSem+i))), 13, UIColor.black)
+                
+                // Add grades
+                var GleftX = SleftX
+                var GleftY = BleftY - 20
+                var GrightX = SrightX
+                var GrightY = BleftY
+                addTextLabel(GleftX, GleftY, GrightX, GrightY, String(grades[i]), 13, UIColor.black)
+                
+                print("Drew graph of", Int2Sem(minSem + i ),":",grades[i], "with coordinates: (", BleftX, BleftY, BrightX, BrightY, ")","current Counter:",counter)
             }
         }
     }
