@@ -47,9 +47,20 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             case .success(_):
                 if let data = response.result.value{
                     let json = JSON(data)
-                    print(json)
+                    for item in json.arrayValue{
+                        
+                        var list = item["club"].arrayValue
+                        for i in 0 ..< list.count{
+                            self.values.append(list[i].stringValue)
+                        }
+                        print(self.values)
+                        
+                        self.myGroup.reloadData()
+                    }
+                   
                     
                 }
+                
             case .failure(let error):
                 print(error)
             }
@@ -98,6 +109,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
             add.backgroundColor = .lightGray
             choiced.append(values[editActionsForRowAt.row])
+            
+            
+            
+            
             return [add]
         }else {
             let del = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
