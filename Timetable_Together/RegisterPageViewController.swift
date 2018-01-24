@@ -124,8 +124,10 @@ class RegisterPageViewController: UIViewController{
             "studentid" : userStudentid!,
             "password" : userPassword!,
             "school" : userSchool!,
-            "major" : major
-        ]
+            "major" : major,
+            "club" : [],
+            "subject" : [],
+            ] as [String : Any]
         
         let url = "http://143.248.140.251:5480/"
         
@@ -136,11 +138,8 @@ class RegisterPageViewController: UIViewController{
                 let respon  = response.result.value!
                 print(respon)
                 self.response(serverresponse: respon)
-                self.DBInsert(Department: userinformation["major"]!!, userName: userinformation["name"]!!, studentId: userinformation["studentid"]!!)
-                print("userinformation major:",userinformation["major"]!!)
-                print("userinformation username:",userinformation["name"])
-                print("userinformation studentId:", userinformation["studentid"])
-                print(userinformation["school"])
+                self.DBInsert(Department: userinformation["major"]! as! String, userName: userinformation["name"]! as! String, studentId: userinformation["studentid"]! as! String)
+                
                 
             case .failure(let error):
                 print(error)

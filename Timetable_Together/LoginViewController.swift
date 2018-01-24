@@ -104,6 +104,7 @@ class LoginViewController: UIViewController {
             UserDefaults.standard.set(userpassword, forKey: "userpassword")
             UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
             print(serverresponse)
+            print(userstudentid)
             
             let url = "http://143.248.140.251:5480/"
             
@@ -111,16 +112,16 @@ class LoginViewController: UIViewController {
                 switch response.result{
                 case .success(_):
                     if let data = response.result.value{
-              
+                        
                         let json = JSON(data)
                         for item in json{
                             let b = item.1
                             print(b[" CourseNum"])
                             self.DBinsertClass(Department: b["Department"].stringValue, CourseType: b[" CourseType"].stringValue, CourseNum: b[" CourseNum"].stringValue, Section: b[" Section"].stringValue, CourseTitle: b[" CourseTitle"].stringValue, AU: b[" AU"].stringValue, Credit: b[" Credit"].stringValue, Instructor: b[" Instructor"].stringValue, ClassTime: b[" ClassTime"].stringValue, Classroom: b[" classroom"].stringValue)
-                
+                            
                         }
-    
-                }
+                        
+                    }
                 case .failure(let error):
                     print(error)
                 }

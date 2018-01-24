@@ -7,6 +7,8 @@
 ///
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
@@ -33,9 +35,11 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     //sever에서 불러오기
-    var values = ["hurricane", "sparcs", "k-bird", "창작동화", "둘리", "오케스트라"]
+    var values = [String]()
     var filtered = [String]()
     var choiced = [String]()
+    let url = "http://143.248.140.251:5480/"
+    let userstudentid = UserDefaults.standard.string(forKey: "userstudentid")
     
     var searchActivated: Bool = false
     
@@ -53,8 +57,48 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         myGroup.register(UITableViewCell.self, forCellReuseIdentifier: "mycell")
         
         NaviBar.topItem?.title = "My Group List"
-        NaviBar.backgroundColor = UIColor(red: 0, green: 0.7333, blue: 0.8, alpha: 1.0) ///* #00bbcc */
-        SearchBarList.barTintColor = UIColor(red: 0, green: 0.7569, blue: 0.8588, alpha: 1.0) ///* #00c1db */
+
+        NaviBar.backgroundColor = UIColor(red: 0, green: 0.7333, blue: 0.8, alpha: 1.0) /* #00bbcc */
+        SearchBarList.barTintColor = UIColor(red: 0, green: 0.7569, blue: 0.8588, alpha: 1.0) /* #00c1db */
+        
+        Alamofire.request(url + "club").responseJSON { response in
+            switch response.result{
+            case .success(_):
+                if let data = response.result.value{
+                    let json = JSON(data)
+                    for item in json.arrayValue{
+                        
+                        var list = item["club"].arrayValue
+                        for i in 0 ..< list.count{
+                            self.values.append(list[i].stringValue)
+                        }
+                        print(self.values)
+                        self.allGroup.reloadData()
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+        let userid = [
+            "studentid" : userstudentid!
+        ]
+        
+        Alamofire.request(url + "getuserclub", method:.post, parameters:userid,encoding: JSONEncoding.default).responseString { response in
+            switch response.result {
+            case .success:
+                // print(response.result.value!)
+                let respon  = response.result.value!
+                print(respon)
+                
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+        
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -98,12 +142,53 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
             add.backgroundColor = .lightGray
             choiced.append(values[editActionsForRowAt.row])
+            
+            let addclub = [
+                "studentid" : userstudentid!,
+                "club" : values[editActionsForRowAt.row]
+            ]
+            
+            Alamofire.request(url + "insertclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
+                switch response.result {
+                case .success:
+                    // print(response.result.value!)
+                    let respon  = response.result.value!
+                    print(respon)
+                  
+                case .failure(let error):
+                    print(error)
+                    
+                }
+            }
+
+            
+            
             return [add]
         }else {
             let del = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
                 print("Delete button tapped")
             }
             del.backgroundColor = UIColor(red: 0.8078, green: 0.2, blue: 0, alpha: 1.0)
+            
+            let addclub = [
+                "studentid" : userstudentid!,
+                "club" : values[editActionsForRowAt.row]
+            ]
+            
+            Alamofire.request(url + "deleteclub", method:.post, parameters:addclub,encoding: JSONEncoding.default).responseString { response in
+                switch response.result {
+                case .success:
+                    // print(response.result.value!)
+                    let respon  = response.result.value!
+                    print(respon)
+                    
+                case .failure(let error):
+                    print(error)
+                    
+                }
+            }
+        
+            myGroup.reloadData()
             return [del]
         }
     }

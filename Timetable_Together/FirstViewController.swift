@@ -68,6 +68,7 @@ class FirstViewController: UIViewController{
     let Semester = Expression<String>("Semester")
     let Grade = Expression<String>("Grade")
     
+
     var databaseAllSubject: Connection!
     let subjectsTable = Table("SubjectList")
     let sid = Expression<Int>("id")
@@ -192,9 +193,11 @@ class FirstViewController: UIViewController{
         }))
         self.present(alert,animated: true,completion: nil)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(userstudentid)
         
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
