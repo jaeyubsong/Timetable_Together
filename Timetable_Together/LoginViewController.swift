@@ -126,7 +126,7 @@ class LoginViewController: UIViewController {
                 }
             }
             
-            DBlistClasses()
+            //DBlistClasses()
             /*
             Alamofire.request(url + serverresponse+"club" ).responseJSON { response in
                 switch response.result{

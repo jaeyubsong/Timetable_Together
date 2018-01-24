@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import SQLite
+import Alamofire
 
 class FirstViewController: UIViewController{
 
@@ -31,89 +32,8 @@ class FirstViewController: UIViewController{
     
     
     var filteredData = [Class]()
-    
-    @IBAction func setting(_ sender: Any) {
-        let alert = UIAlertController(title: "시간표", message: "시작 시간과 끝시간을 적어주세요", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addTextField { (textField) in
-            textField.placeholder = "시작시간 ex)오전 8시 => 8 입력"
-        }
-        alert.addTextField { (textField) in
-            textField.placeholder = "끝시간 ex)오후 8시 => 20 입력"
-        }
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
-            var textField = alert?.textFields![0]
-            if textField?.text != "" {
-                let temp = Int(textField!.text!)!
-                textField = alert!.textFields![1]
-                if textField?.text != ""{
-                    self.startTime = temp
-                    self.endTime = Int(textField!.text!)!
-                    if(self.endTime > self.startTime){
-                        for view in self.scrollPage.subviews{
-                            view.removeFromSuperview()
-                        }
-                        //DB 에서 있으면 불러오기 없으면 새로 고침
-                        self.viewDidLoad()
-                    }else {
-                        Error.self
-                    }
-                    
-                }
-            }
-        }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    ///end of the semester
-    @IBAction func saveButton(_ sender: Any) {
-        let alert = UIAlertController(title: "학기를 마치며", message: "성적을 숫자로 입력해 주세요", preferredStyle: UIAlertControllerStyle.alert)
-        var subjectOrder = [String]()
-        do{
-            let subjects = try self.databaseUser.prepare(self.usersTable)
-            for subject in subjects{
-                alert.addTextField { (textField) in
-                    textField.placeholder = subject[self.CourseTitle]
-                    subjectOrder.append(subject[self.CourseTitle])
-                }
-            }
-        }catch{
-            print(error)
-        }
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
-            for index in 0...((alert?.textFields!.count)!-1){
-                let textField = alert?.textFields![index]
-                self.DBupdateGrade(CourseNum: subjectOrder[index], Grade: (textField?.text!)!)
-            }
-            
-        }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    ///plusButton
-    @IBAction func search(_ sender: Any) {
-        print("IN plus Button")
-        clickPlus = !clickPlus
-        if(clickPlus){
-            scrollPage.frame.size.height = scrollPage.frame.size.height / 2
-            searchPage.isHidden = false
-        }else{
-            searchPage.isHidden = true
-            scrollPage.frame.size.height = scrollPage.frame.size.height * 2
-        }
-    }
-    ///subjectButton
-    @objc func pressButton(_ button: UIButton) {
-        //같이 듣는 사람들 목록(서버연동)
-        let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
-            (action: UIAlertAction!) in
-            self.removeClass(tag: button.tag)
-            let Title = button.titleLabel!.text!.split(separator: "\n")[0]
-            self.DBdeleteClass(CourseTitle: String(Title))
-            print("Do Delete: " + String(button.tag))
-        }))
-        self.present(alert,animated: true,completion: nil)
-    }
+    let userstudentid = UserDefaults.standard.string(forKey: "userstudentid")
+    let url = "http://143.248.140.251:5480/"
     
     let days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
     let dayColors = [UIColor(red: 0.918, green: 0.224, blue: 0.153, alpha: 1),
@@ -166,6 +86,90 @@ class FirstViewController: UIViewController{
     var startTime = 8
     var endTime = 18
     
+    @IBAction func setting(_ sender: Any) {
+        let alert = UIAlertController(title: "시간표", message: "시작 시간과 끝시간을 적어주세요", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addTextField { (textField) in
+            textField.placeholder = "시작시간 ex)오전 8시 => 8 입력"
+        }
+        alert.addTextField { (textField) in
+            textField.placeholder = "끝시간 ex)오후 8시 => 20 입력"
+        }
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+            var textField = alert?.textFields![0]
+            if textField?.text != "" {
+                let temp = Int(textField!.text!)!
+                textField = alert!.textFields![1]
+                if textField?.text != ""{
+                    self.startTime = temp
+                    self.endTime = Int(textField!.text!)!
+                    if(self.endTime > self.startTime){
+                        for view in self.scrollPage.subviews{
+                            view.removeFromSuperview()
+                        }
+                        //DB 에서 있으면 불러오기 없으면 새로 고침
+                        self.viewDidLoad()
+                    }
+                }
+            }
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    ///end of the semester
+    @IBAction func saveButton(_ sender: Any) {
+        let alert = UIAlertController(title: "학기를 마치며", message: "성적을 숫자로 입력해 주세요", preferredStyle: UIAlertControllerStyle.alert)
+        var subjectOrder = [String]()
+        do{
+            let subjects = try self.databaseUser.prepare(self.usersTable)
+            for subject in subjects{
+                alert.addTextField { (textField) in
+                    textField.placeholder = subject[self.CourseTitle]
+                    subjectOrder.append(subject[self.CourseTitle])
+                }
+            }
+        }catch{
+            print(error)
+        }
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak alert] (_) in
+            for index in 0...((alert?.textFields!.count)!-1){
+                let textField = alert?.textFields![index]
+                self.DBupdateGrade(CourseNum: subjectOrder[index], Grade: (textField!.text!))
+                print("Save BUTTON"+textField!.text!)
+                self.DBlistClasses()
+                
+            }
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    ///plusButton
+    @IBAction func search(_ sender: Any) {
+        print("IN plus Button")
+        clickPlus = !clickPlus
+        if(clickPlus){
+            scrollPage.frame.size.height = scrollPage.frame.size.height / 2
+            searchPage.isHidden = false
+        }else{
+            searchPage.isHidden = true
+            scrollPage.frame.size.height = scrollPage.frame.size.height * 2
+        }
+    }
+    ///subjectButton
+    @objc func pressButton(_ button: UIButton) {
+        //같이 듣는 사람들 목록(서버연동)
+        let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Delete", style: .default, handler: {
+            (action: UIAlertAction!) in
+            self.removeClass(tag: button.tag)
+            let Title = button.titleLabel!.text!.split(separator: "\n")[0]
+            self.DBdeleteClass(CourseTitle: String(Title))
+            
+            print("Do Delete: " + String(button.tag))
+        }))
+        self.present(alert,animated: true,completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -184,18 +188,7 @@ class FirstViewController: UIViewController{
         }
 
         createUserTable()
-        
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS320", Section: "", CourseTitle: "프로그래밍언어", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "1")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS390", Section: "", CourseTitle: "나이산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "2")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS366", Section: "", CourseTitle: "이산한산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "1")
-        DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS324", Section: "", CourseTitle: "가이산", AU: "0", Credit: "3.0:0:3.0", Instructor: "류석영", ClassTime: "월 14:30~16:00\n수 14:30~16:00", Classroom:
-            "(E11)창의학습관터만홀", Semester: "2018S", Grade: "")
-         DBinsertClass(Department: "전산학부", CourseType: "전공필수", CourseNum: "CS319", Section: "", CourseTitle: "중간에 이산 끝", AU: "0", Credit: "3.0:0:3.0", Instructor: "윤현수", ClassTime: "화 14:30~16:00\n목 14:30~16:00", Classroom: "(N1)김병호·김삼열 IT융합빌딩201", Semester: "2018S", Grade: "")
-        DBupdateGrade(CourseNum: "CS311", Grade: "4.3")
-        
+        DBdeleteAll()
         DBlistClasses()
         
         CreateTimeTable(startTime: startTime, endTime: endTime)
@@ -214,10 +207,12 @@ class FirstViewController: UIViewController{
         
         year.selectRow(6, inComponent: 0, animated: true)
         semester.selectRow(0, inComponent: 0, animated: true)
-        
+
+    
         //처음 시작하면 DB 불러오기 (클래스 + 학기)
         
     }
+    
     
     
     
@@ -276,6 +271,8 @@ class FirstViewController: UIViewController{
         let updateClass = userClass.update(self.Grade <- Grade)
         do {
             try self.databaseUser.run(updateClass)
+            print("UPdateGrade " + Grade)
+            DBlistClasses()
         } catch {
             print(error)
         }
@@ -289,6 +286,7 @@ class FirstViewController: UIViewController{
         } catch {
             print(error)
         }
+        DBlistClasses()
     }
     
     func DBdeleteOneSemester(Semester: String) {
@@ -319,7 +317,6 @@ class FirstViewController: UIViewController{
         var firstClass = [Class]()
         var secondClass = [Class]()
         do {
-            //모든 과목 다들어있는 디비에서 찾기
             let subjects = try self.databaseAllSubject.prepare(self.subjectsTable)
             for subject in subjects {
                 if (subject[self.CourseTitle].contains(CourseTitlePart)) {
@@ -342,7 +339,6 @@ class FirstViewController: UIViewController{
         var firstClass = [Class]()
         var secondClass = [Class]()
         do {
-            //모든 과목 다들어있는 디비에서 찾기
             let subjects = try self.databaseAllSubject.prepare(self.subjectsTable)
             for subject in subjects {
                 if (subject[self.Instructor].contains(InstructorPart)) {
@@ -699,12 +695,35 @@ extension FirstViewController: UITableViewDataSource,UITableViewDelegate{
             let instructor = self.filteredData[editActionsForRowAt.row].Instructor
             let classtime = self.filteredData[editActionsForRowAt.row].ClassTime
             let classroom = self.filteredData[editActionsForRowAt.row].Classroom
-            let semester = self.filteredData[editActionsForRowAt.row].Semester
+            let sem = self.semesterType[self.semester.selectedRow(inComponent: 0)] == "가을" ? "F" : "S"
+            let semester = self.yearType[self.year.selectedRow(inComponent: 0)] + sem
             let grade = self.filteredData[editActionsForRowAt.row].Grade
             
             let times = classtime.split(separator: "\n")
             let text = courseTitle + "\n" + classroom
             let userId = self.filteredData[editActionsForRowAt.row].userId
+            
+            print(courseNum)
+            let subject: [String: String] = [
+                "semester" : semester,
+                "code" : courseNum + section
+            ]
+            
+            let info : [String: AnyObject] = [
+                "studentid" : "20150397" as AnyObject,
+                "subject" : subject as AnyObject
+            ]
+            
+            Alamofire.request(self.url + "subject", method:.post, parameters: info, encoding: JSONEncoding.default).responseString { response in
+                switch response.result {
+                case .success:
+                    let respon  = response.result.value!
+                case .failure(let error):
+                    print(error)
+                    
+                }
+            }
+
             
             self.DBinsertClass(Department: department, CourseType: courseType, CourseNum: courseNum, Section: section, CourseTitle: courseTitle, AU: au, Credit: credit, Instructor: instructor, ClassTime: classtime, Classroom: classroom, Semester: semester, Grade: grade)
             self.addClass(times, text, userId)

@@ -56,17 +56,17 @@ class SecondViewController: UIViewController {
         print("End Semester is: ", endSem)
         
         //print averages of all semester
-        for i in startSem...endSem {
-            var currentSem = DBSemesterTotalGrade(Semester: Int2Sem(i))[0]
-            if (currentSem.count == 0) {
-                print (Int2Sem(i), "has no grades")
-            } else {
-                print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*1000).rounded() / 1000)
-            }
-        }
+//        for i in startSem...endSem {
+//            var currentSem = DBSemesterTotalGrade(Semester: Int2Sem(i))[0]
+//            if (currentSem.count == 0) {
+//                print (Int2Sem(i), "has no grades")
+//            } else {
+//                print (Int2Sem(i), ": ", (getAverage(Array: currentSem)*1000).rounded() / 1000)
+//            }
+//        }
         
         //Draw graph if there are any grades
-        if (endSem-startSem > 0) {
+        if (startSem != 0) {
             var totalAverage = averageArray(startSem, endSem, "total")
             var majorAverage = averageArray(startSem, endSem, "major")
             for i in 0...totalAverage.count-1 {
