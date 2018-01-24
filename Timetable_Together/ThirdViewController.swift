@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
@@ -16,9 +18,10 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var NaviBar: UINavigationBar!
     
     //sever에서 불러오기
-    var values = ["hurricane", "sparcs", "k-bird", "창작동화", "둘리", "오케스트라"]
+    var values = [String]()
     var filtered = [String]()
     var choiced = [String]()
+    let url = "http://143.248.140.251:5480/"
     
     var searchActivated: Bool = false
     
@@ -38,6 +41,20 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         NaviBar.topItem?.title = "My Group List"
         NaviBar.backgroundColor = UIColor(red: 0, green: 0.7333, blue: 0.8, alpha: 1.0) /* #00bbcc */
         SearchBarList.barTintColor = UIColor(red: 0, green: 0.7569, blue: 0.8588, alpha: 1.0) /* #00c1db */
+        
+        Alamofire.request(url + "club").responseJSON { response in
+            switch response.result{
+            case .success(_):
+                if let data = response.result.value{
+                    let json = JSON(data)
+                    print(json)
+                    
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

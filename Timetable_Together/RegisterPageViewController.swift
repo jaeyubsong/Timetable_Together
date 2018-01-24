@@ -70,8 +70,10 @@ class RegisterPageViewController: UIViewController{
             "name" : userName!,
             "studentid" : userStudentid!,
             "password" : userPassword!,
-            "school" : userSchool!
-        ]
+            "school" : userSchool!,
+            "club" : [],
+            "subject" : []
+            ] as [String : Any]
         
         let url = "http://143.248.140.251:5480/"
         

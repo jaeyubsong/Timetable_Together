@@ -96,9 +96,12 @@ class FirstViewController: UIViewController{
     let Semester = Expression<String>("Semester")
     let Grade = Expression<String>("Grade")
     
+    let userstudentid = UserDefaults.standard.bool(forKey: "userstudentid")
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print(userstudentid)
         
         do {
             let documentDirectory = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
